@@ -1,42 +1,38 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import AdminLayout from '../components/AdminLayout';
+import PublicLayout from '../components/PublicLayout';
 
-import Home from '../pages/public/Home';
-import Catalog from '../pages/public/Catalog';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 
+import AdminBooks from '../pages/admin/AdminBooks';
+import AdminCategories from '../pages/admin/AdminCategories';
+import AdminLoans from '../pages/admin/AdminLoans';
+import AdminProfile from '../pages/admin/AdminProfile';
+import AdminReturns from '../pages/admin/AdminReturns';
+import AdminUsers from '../pages/admin/AdminUsers';
 import Dashboard from '../pages/admin/Dashboard';
-import AdminPerfil from '../pages/admin/AdminPerfil';
-import AdminCategorias from '../pages/admin/AdminCategorias';
-import AdminRegistroCategorias from '../pages/admin/AdminRegistroCategorias';
-import AdminPrestamos from '../pages/admin/AdminPrestamos';
-import AdminDevoluciones from '../pages/admin/AdminDevoluciones';
-import AdminRegistroDevoluciones from '../pages/admin/AdminRegistroDevoluciones';
-import AdminEstudiantes from '../pages/admin/AdminEstudiantes';
-import AdminRegistroEstudiantes from '../pages/admin/AdminRegistroEstudiantes';
-import AdminCatalogo from '../pages/admin/AdminCatalogo';
-import AdminRegistroLibros from '../pages/admin/AdminRegistroLibros';
 
-import PublicLayout from '../components/PublicLayout';
+import Catalog from '../pages/public/Catalog';
+import Home from '../pages/public/Home';
 
 const appRouter = createBrowserRouter([
     {
         path: '/',
-        element: <PublicLayout><Home /></PublicLayout>
-    },
-    {
-        path: '/catalog',
-        element: <PublicLayout><Catalog /></PublicLayout>
+        element: <PublicLayout />,
+        children: [
+            { index: true, element: <Home /> },
+            { path: 'catalog', element: <Catalog /> },
+        ],
     },
     {
         path: '/login',
-        element: <Login />
+        element: <Login />,
     },
     {
         path: '/register',
-        element: <Register />
+        element: <Register />,
     },
     {
         path: '/admin',
@@ -44,22 +40,26 @@ const appRouter = createBrowserRouter([
         children: [
             { index: true, element: <Navigate to="dashboard" replace /> },
             { path: 'dashboard', element: <Dashboard /> },
-            { path: 'perfil', element: <AdminPerfil /> },
-            { path: 'catalogo', element: <AdminCatalogo /> },
-            { path: 'registro-libros', element: <AdminRegistroLibros /> },
-            { path: 'categorias', element: <AdminCategorias /> },
-            { path: 'registro-categorias', element: <AdminRegistroCategorias /> },
-            { path: 'estudiantes', element: <AdminEstudiantes /> },
-            { path: 'registro-estudiantes', element: <AdminRegistroEstudiantes /> },
-            { path: 'prestamos', element: <AdminPrestamos /> },
-            { path: 'devoluciones', element: <AdminDevoluciones /> },
-            { path: 'registro-devoluciones', element: <AdminRegistroDevoluciones /> },
-        ]
+            { path: 'perfil', element: <AdminProfile /> },
+            { path: 'catalogo', element: <AdminBooks /> },
+            { path: 'registro-libros', element: <Navigate to="../catalogo" replace /> },
+            { path: 'categorias', element: <AdminCategories /> },
+            { path: 'registro-categorias', element: <Navigate to="../categorias" replace /> },
+            { path: 'usuarios', element: <AdminUsers /> },
+            { path: 'estudiantes', element: <Navigate to="../usuarios" replace /> },
+            { path: 'registro-estudiantes', element: <Navigate to="../usuarios" replace /> },
+            { path: 'prestamos', element: <AdminLoans /> },
+            { path: 'devoluciones', element: <AdminReturns /> },
+            { path: 'registro-devoluciones', element: <Navigate to="../devoluciones" replace /> },
+        ],
     },
     {
         path: '*',
-        element: <PublicLayout><h2 className="text-center mt-5">404 - Página No Encontrada</h2></PublicLayout>
-    }
+        element: <PublicLayout />,
+        children: [
+            { index: true, element: <h2 className="text-center mt-5">404 - Pagina No Encontrada</h2> },
+        ],
+    },
 ]);
 
 export default appRouter;

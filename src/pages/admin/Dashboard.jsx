@@ -4,7 +4,7 @@ import { fetchDashboardStats, fetchUltimosPrestamos } from '../../services/api';
 
 const initialStats = {
     totalLibros: 0,
-    totalEstudiantes: 0,
+    totalUsuarios: 0,
     totalPrestamos: 0,
     totalCategorias: 0,
     totalProfesores: 0,
@@ -76,8 +76,8 @@ const Dashboard = () => {
                         <i className="fas fa-user-graduate" aria-hidden />
                     </div>
                     <div className="card-content">
-                        <div className="card-value">{loading ? '…' : stats.totalEstudiantes}</div>
-                        <div className="card-title">Total Estudiantes</div>
+                        <div className="card-value">{loading ? '…' : stats.totalUsuarios}</div>
+                        <div className="card-title">Total Usuarios</div>
                     </div>
                 </div>
                 <div className="card card-warning">

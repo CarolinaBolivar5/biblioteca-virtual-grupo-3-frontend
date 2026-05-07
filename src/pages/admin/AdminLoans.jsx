@@ -1,10 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { endPoints } from '../../config/endPoints';
-
-const normalizePrestamos = (data) => {
-    const list = Array.isArray(data) ? data : data?.prestamos ?? data?.content ?? data?.data ?? [];
-    return Array.isArray(list) ? list : [];
-};
+import { getPrestamos } from '../../services/api';
 
 const getNombreUsuario = (prestamo) => {
     const perfil = prestamo?.perfil;
@@ -89,7 +84,7 @@ const formatDateFromDate = (date) => {
     return date.toISOString().slice(0, 10);
 };
 
-const AdminPrestamos = () => {
+const AdminLoans = () => {
     const [prestamos, setPrestamos] = useState([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true);
@@ -103,15 +98,10 @@ const AdminPrestamos = () => {
                 setLoading(true);
                 setError('');
 
-                const response = await fetch(endPoints.prestamos);
-                const data = await response.json().catch(() => ({}));
-
-                if (!response.ok) {
-                    throw new Error(data?.message || 'No se pudieron cargar los prestamos.');
-                }
+                const data = await getPrestamos();
 
                 if (!cancelled) {
-                    setPrestamos(normalizePrestamos(data));
+                    setPrestamos(data);
                 }
             } catch (err) {
                 console.error('Error al consultar prestamos:', err);
@@ -219,4 +209,4 @@ const AdminPrestamos = () => {
     );
 };
 
-export default AdminPrestamos;
+export default AdminLoans;

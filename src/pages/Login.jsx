@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { endPoints } from '../config/endPoints';
 import { saveAuthData } from '../helpers/auth';
+import { getPerfilPorId, getUsuarios } from '../services/api';
 
 const getFullName = (source) => {
   if (!source || typeof source !== 'object') return '';
@@ -11,11 +11,6 @@ const getFullName = (source) => {
   const lastName = source.apellido ?? source.lastName ?? source.perfil?.apellido ?? source.perfil?.lastName ?? '';
 
   return `${String(firstName).trim()} ${String(lastName).trim()}`.trim();
-};
-
-const normalizeUsers = (data) => {
-  const list = Array.isArray(data) ? data : data?.usuarios ?? data?.content ?? data?.data ?? [];
-  return Array.isArray(list) ? list : [];
 };
 
 const Login = () => {
@@ -32,14 +27,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(endPoints.usuarios);
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data?.message || 'No se pudo consultar el backend.');
-      }
-
-      const usuarios = normalizeUsers(data);
+      const usuarios = await getUsuarios();
       const email = credentials.email.trim();
       const authUser = usuarios.find(
         (user) =>
@@ -55,10 +43,7 @@ const Login = () => {
       let perfil = authUser.perfil ?? null;
 
       if (!perfil && perfilId) {
-        const perfilResponse = await fetch(endPoints.perfilPorId(perfilId));
-        if (perfilResponse.ok) {
-          perfil = await perfilResponse.json();
-        }
+        perfil = await getPerfilPorId(perfilId);
       }
 
       const rol = authUser.rol?.descripcion || authUser.rolDescripcion || authUser.rol || '';
