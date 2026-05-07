@@ -1,5 +1,6 @@
 /** HU07: URL base y rutas de API centralizadas (sin magic strings en la lógica de fetch) */
-export const BASE_URL = 'https://jsonplaceholder.typicode.com';
+import { endPoints } from '../config/endPoints';
+export const BASE_URL = 'https://biblioteca-virtual-grupo-3.onrender.com';
 
 export const ENDPOINTS = {
     POSTS: '/posts',
@@ -68,13 +69,19 @@ export async function fetchUltimosPrestamos(limit = 5) {
 
 export const getLibros = async () => {
     try {
-        const data = await fetchJson(`${ENDPOINTS.POSTS}?_limit=10`);
-        return data.map((item) => ({
-            id: item.id,
-            titulo: item.title,
-            descripcion: item.body,
-            categoria: 'Ficción',
-            disponible: true,
+        const response = await fetch(endPoints.libros);
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+        const data = await response.json();
+        return data.map(libro => ({
+            id: libro.id,
+            titulo: libro.nombreLibro,
+            descripcion: libro.descripcion || 'Sin descripción',
+            disponible: libro.estado === null || libro.estado === 'disponible',
+            autoresTexto: libro.autoresTexto,
+            cantidadPaginas: libro.cantidadPaginas,
+            googleId: libro.googleId,
+            thumbnail: libro.thumbnail,
+            categoria: libro.categoria
         }));
     } catch (error) {
         console.error('Hubo un error en GET libros:', error);
@@ -84,10 +91,17 @@ export const getLibros = async () => {
 
 export const crearLibro = async (nuevoLibro) => {
     try {
-        await delay(800);
-        const response = await fetch(`${BASE_URL}${ENDPOINTS.POSTS}`, {
+        const response = await fetch(endPoints.libros, {
             method: 'POST',
-            body: JSON.stringify(nuevoLibro),
+            body: JSON.stringify({
+                nombreLibro: nuevoLibro.nombreLibro,
+                autoresTexto: nuevoLibro.autoresTexto,
+                cantidadPaginas: parseInt(nuevoLibro.cantidadPaginas) || 0,
+                descripcion: nuevoLibro.descripcion,
+                googleId: nuevoLibro.googleId || null,
+                thumbnail: nuevoLibro.thumbnail || null,
+                categoria: { id: nuevoLibro.categoriaId }
+            }),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
@@ -96,6 +110,44 @@ export const crearLibro = async (nuevoLibro) => {
         return await response.json();
     } catch (error) {
         console.error('Hubo un error en POST libro:', error);
+        throw error;
+    }
+};
+
+export const eliminarLibro = async (id) => {
+    try {
+        const response = await fetch(`${endPoints.libros}/${id}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) throw new Error('Fallo al eliminar libro');
+        return true;
+    } catch (error) {
+        console.error('Hubo un error en DELETE libro:', error);
+        throw error;
+    }
+};
+
+export const actualizarLibro = async (id, libroActualizado) => {
+    try {
+        const response = await fetch(`${endPoints.libros}/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                nombreLibro: libroActualizado.nombreLibro,
+                autoresTexto: libroActualizado.autoresTexto,
+                cantidadPaginas: parseInt(libroActualizado.cantidadPaginas) || 0,
+                descripcion: libroActualizado.descripcion,
+                googleId: libroActualizado.googleId || null,
+                thumbnail: libroActualizado.thumbnail || null,
+                categoria: { id: libroActualizado.categoriaId }
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        if (!response.ok) throw new Error('Fallo al actualizar libro');
+        return await response.json();
+    } catch (error) {
+        console.error('Hubo un error en PUT libro:', error);
         throw error;
     }
 };
