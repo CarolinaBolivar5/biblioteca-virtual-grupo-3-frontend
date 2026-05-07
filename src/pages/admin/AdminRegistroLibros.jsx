@@ -5,7 +5,15 @@ import { crearLibro } from '../../services/api';
 
 const AdminRegistroLibros = () => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({ titulo: '', categoria: 'Ficción', descripcion: '' });
+    const [formData, setFormData] = useState({ 
+        nombreLibro: '', 
+        autoresTexto: '', 
+        cantidadPaginas: '', 
+        descripcion: '', 
+        googleId: '', 
+        thumbnail: '', 
+        categoriaId: 1 // Asumir categoría por defecto
+    });
     const [submitting, setSubmitting] = useState(false);
 
     const handleChange = e => setFormData({...formData, [e.target.name]: e.target.value});
@@ -39,14 +47,32 @@ const AdminRegistroLibros = () => {
                 <form className="add-edit-form" onSubmit={handleSubmit}>
                     <div className="form-group-row">
                         <div className="form-group">
-                            <label>Título del Libro <span className="text-danger">*</span></label>
-                            <input type="text" name="titulo" value={formData.titulo} onChange={handleChange} required />
+                            <label>Nombre del Libro <span className="text-danger">*</span></label>
+                            <input type="text" name="nombreLibro" value={formData.nombreLibro} onChange={handleChange} required />
                         </div>
                         <div className="form-group">
-                            <label>Categoría <span className="text-danger">*</span></label>
-                            <select name="categoria" value={formData.categoria} onChange={handleChange}>
-                                <option>Ficción</option><option>Ciencia</option><option>Historia</option>
-                            </select>
+                            <label>Autores <span className="text-danger">*</span></label>
+                            <input type="text" name="autoresTexto" value={formData.autoresTexto} onChange={handleChange} required />
+                        </div>
+                    </div>
+                    <div className="form-group-row">
+                        <div className="form-group">
+                            <label>Cantidad de Páginas</label>
+                            <input type="number" name="cantidadPaginas" value={formData.cantidadPaginas} onChange={handleChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>Categoría ID <span className="text-danger">*</span></label>
+                            <input type="number" name="categoriaId" value={formData.categoriaId} onChange={handleChange} required />
+                        </div>
+                    </div>
+                    <div className="form-group-row">
+                        <div className="form-group">
+                            <label>Google ID</label>
+                            <input type="text" name="googleId" value={formData.googleId} onChange={handleChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>Thumbnail URL</label>
+                            <input type="url" name="thumbnail" value={formData.thumbnail} onChange={handleChange} />
                         </div>
                     </div>
                     <div className="form-group-row">

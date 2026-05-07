@@ -1,1 +1,0 @@
-// Funciones de utilidad (validaciones, formateo)
