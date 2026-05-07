@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { ApiAutenticacion } from '../services/api';
 
 const Register = () => {
   const navigate = useNavigate();
