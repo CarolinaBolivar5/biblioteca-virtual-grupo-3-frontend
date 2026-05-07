@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { endPoints } from '../../config/endPoints';
 import { getUser } from '../../helpers/auth';
+import { getPerfilPorId, getUsuarioPorId } from '../../services/api';
 
 const getDisplayName = (user) => {
     const fullName = [user?.nombre, user?.apellido].filter(Boolean).join(' ').trim();
     return fullName || user?.name || user?.email || 'Administrador';
 };
 
-const AdminPerfil = () => {
+const AdminProfile = () => {
     const user = getUser();
     const [profile, setProfile] = useState(user);
     const [loading, setLoading] = useState(Boolean(user?.id));
@@ -20,16 +20,12 @@ const AdminPerfil = () => {
 
         const loadProfile = async () => {
             try {
-                const usuarioResponse = await fetch(endPoints.usuarioPorId(user.id));
-                const usuarioData = usuarioResponse.ok ? await usuarioResponse.json() : user;
+                const usuarioData = await getUsuarioPorId(user.id).catch(() => user);
                 const perfilId = usuarioData.perfilId ?? usuarioData.perfil?.id ?? user.perfilId ?? user.perfil?.id;
                 let perfilData = usuarioData.perfil ?? user.perfil ?? null;
 
                 if (!perfilData && perfilId) {
-                    const perfilResponse = await fetch(endPoints.perfilPorId(perfilId));
-                    if (perfilResponse.ok) {
-                        perfilData = await perfilResponse.json();
-                    }
+                    perfilData = await getPerfilPorId(perfilId).catch(() => null);
                 }
 
                 if (!cancelled) {
@@ -54,7 +50,7 @@ const AdminPerfil = () => {
         return () => {
             cancelled = true;
         };
-    }, [user?.id]);
+    }, [user]);
 
     if (!user) {
         return <Navigate to="/login" replace />;
@@ -120,4 +116,4 @@ const AdminPerfil = () => {
     );
 };
 
-export default AdminPerfil;
+export default AdminProfile;
