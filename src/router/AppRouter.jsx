@@ -14,7 +14,6 @@ import AdminRegistroCategorias from '../pages/admin/AdminRegistroCategorias';
 import AdminPrestamos from '../pages/admin/AdminPrestamos';
 import AdminDevoluciones from '../pages/admin/AdminDevoluciones';
 import AdminRegistroDevoluciones from '../pages/admin/AdminRegistroDevoluciones';
-import AdminRegistroPrestamo from '../pages/admin/AdminRegistroPrestamo';
 import AdminEstudiantes from '../pages/admin/AdminEstudiantes';
 import AdminRegistroEstudiantes from '../pages/admin/AdminRegistroEstudiantes';
 import AdminCatalogo from '../pages/admin/AdminCatalogo';
@@ -55,7 +54,6 @@ const appRouter = createBrowserRouter([
             { path: 'prestamos', element: <AdminPrestamos /> },
             { path: 'devoluciones', element: <AdminDevoluciones /> },
             { path: 'registro-devoluciones', element: <AdminRegistroDevoluciones /> },
-            { path: 'registro-prestamo', element: <AdminRegistroPrestamo /> }
         ]
     },
     {
