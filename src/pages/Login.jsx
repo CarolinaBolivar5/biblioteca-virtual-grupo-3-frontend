@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { endPoints } from '../config/endPoints';
+import { getUsuarios, getPerfilPorId } from '../services/api';
 import { saveAuthData } from '../helpers/auth';
 
 const getFullName = (source) => {
@@ -32,12 +32,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(endPoints.usuarios);
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data?.message || 'No se pudo consultar el backend.');
-      }
+      const data = await getUsuarios();
 
       const usuarios = normalizeUsers(data);
       const email = credentials.email.trim();
@@ -55,10 +50,7 @@ const Login = () => {
       let perfil = authUser.perfil ?? null;
 
       if (!perfil && perfilId) {
-        const perfilResponse = await fetch(endPoints.perfilPorId(perfilId));
-        if (perfilResponse.ok) {
-          perfil = await perfilResponse.json();
-        }
+        perfil = await getPerfilPorId(perfilId);
       }
 
       const rol = authUser.rol?.descripcion || authUser.rolDescripcion || authUser.rol || '';

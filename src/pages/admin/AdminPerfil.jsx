@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { endPoints } from '../../config/endPoints';
+import { getUsuarioPorId, getPerfilPorId } from '../../services/api';
 import { getUser } from '../../helpers/auth';
 
 const getDisplayName = (user) => {
@@ -20,16 +20,12 @@ const AdminPerfil = () => {
 
         const loadProfile = async () => {
             try {
-                const usuarioResponse = await fetch(endPoints.usuarioPorId(user.id));
-                const usuarioData = usuarioResponse.ok ? await usuarioResponse.json() : user;
+                const usuarioData = await getUsuarioPorId(user.id);
                 const perfilId = usuarioData.perfilId ?? usuarioData.perfil?.id ?? user.perfilId ?? user.perfil?.id;
                 let perfilData = usuarioData.perfil ?? user.perfil ?? null;
 
                 if (!perfilData && perfilId) {
-                    const perfilResponse = await fetch(endPoints.perfilPorId(perfilId));
-                    if (perfilResponse.ok) {
-                        perfilData = await perfilResponse.json();
-                    }
+                    perfilData = await getPerfilPorId(perfilId);
                 }
 
                 if (!cancelled) {

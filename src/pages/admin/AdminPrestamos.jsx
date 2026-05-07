@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { endPoints } from '../../config/endPoints';
+import { getPrestamos } from '../../services/api';
 
 const normalizePrestamos = (data) => {
     const list = Array.isArray(data) ? data : data?.prestamos ?? data?.content ?? data?.data ?? [];
@@ -103,12 +103,7 @@ const AdminPrestamos = () => {
                 setLoading(true);
                 setError('');
 
-                const response = await fetch(endPoints.prestamos);
-                const data = await response.json().catch(() => ({}));
-
-                if (!response.ok) {
-                    throw new Error(data?.message || 'No se pudieron cargar los prestamos.');
-                }
+                const data = await getPrestamos();
 
                 if (!cancelled) {
                     setPrestamos(normalizePrestamos(data));

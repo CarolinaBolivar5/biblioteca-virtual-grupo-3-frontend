@@ -197,3 +197,39 @@ export const getUsuarios = async () => {
         return [];
     }
 };
+
+export const getPrestamos = async () => {
+    try {
+        const response = await fetch(endPoints.prestamos);
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Hubo un error en GET prestamos:', error);
+        return [];
+    }
+};
+
+export const getUsuarioPorId = async (id) => {
+    try {
+        const response = await fetch(endPoints.usuarioPorId(id));
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Hubo un error en GET usuario por ID:', error);
+        return null;
+    }
+};
+
+export const getPerfilPorId = async (id) => {
+    try {
+        const response = await fetch(endPoints.perfilPorId(id));
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Hubo un error en GET perfil por ID:', error);
+        return null;
+    }
+};
