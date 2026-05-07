@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import '../styles/admin/global.css';
 import AdminLogo from '../assets/Logo.png';
+import { getUser } from '../helpers/auth';
 
 const AdminLayout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const user = getUser();
+    const userName = user?.nombre || user?.name || user?.email || 'Admin';
     const closeSidebar = () => setSidebarOpen(false);
 
     return (
@@ -23,10 +26,17 @@ const AdminLayout = () => {
                     <img src={AdminLogo} alt="Logo" className="logo-sidebar" />
                     Biblioteca
                 </div>
+                <NavLink to="/admin/perfil" className="sidebar-user-link" onClick={closeSidebar}>
+                    <i className="fas fa-user-circle"></i>
+                    <span>{userName}</span>
+                </NavLink>
                 <nav className="sidebar-nav">
                     <div className="sidebar-section-title">PRINCIPAL</div>
                     <NavLink to="/admin/dashboard" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')} onClick={closeSidebar}>
                         <i className="fas fa-th-large icon"></i>Dashboard
+                    </NavLink>
+                    <NavLink to="/admin/perfil" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')} onClick={closeSidebar}>
+                        <i className="fas fa-user-circle icon"></i>Perfil
                     </NavLink>
                     <NavLink to="/admin/prestamos" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')} onClick={closeSidebar}>
                         <i className="fas fa-handshake icon"></i>Préstamos
@@ -63,8 +73,7 @@ const AdminLayout = () => {
                     </button>
                     <nav className="navbar-nav">
                         <span className="nav-link"><i className="fas fa-bell icon-lg text-primary"></i></span>
-                        <span className="nav-link"><i className="fas fa-user-circle icon-lg text-secondary"></i></span>
-                        <span className="nav-link">Admin</span>
+                        <span className="nav-link">Panel admin</span>
                     </nav>
                 </header>
 

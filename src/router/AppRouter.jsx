@@ -4,8 +4,11 @@ import AdminLayout from '../components/AdminLayout';
 
 import Home from '../pages/public/Home';
 import Catalog from '../pages/public/Catalog';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
 
 import Dashboard from '../pages/admin/Dashboard';
+import AdminPerfil from '../pages/admin/AdminPerfil';
 import AdminCategorias from '../pages/admin/AdminCategorias';
 import AdminRegistroCategorias from '../pages/admin/AdminRegistroCategorias';
 import AdminPrestamos from '../pages/admin/AdminPrestamos';
@@ -29,11 +32,20 @@ const appRouter = createBrowserRouter([
         element: <PublicLayout><Catalog /></PublicLayout>
     },
     {
+        path: '/login',
+        element: <Login />
+    },
+    {
+        path: '/register',
+        element: <Register />
+    },
+    {
         path: '/admin',
         element: <AdminLayout />,
         children: [
             { index: true, element: <Navigate to="dashboard" replace /> },
             { path: 'dashboard', element: <Dashboard /> },
+            { path: 'perfil', element: <AdminPerfil /> },
             { path: 'catalogo', element: <AdminCatalogo /> },
             { path: 'registro-libros', element: <AdminRegistroLibros /> },
             { path: 'categorias', element: <AdminCategorias /> },
