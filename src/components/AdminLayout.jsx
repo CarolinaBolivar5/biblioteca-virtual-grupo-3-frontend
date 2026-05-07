@@ -54,7 +54,7 @@ const AdminLayout = () => {
                     </NavLink>
 
                     <div className="sidebar-section-title mt-3">USUARIOS</div>
-                    <NavLink to="/admin/estudiantes" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')} onClick={closeSidebar}>
+                    <NavLink to="/admin/usuarios" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')} onClick={closeSidebar}>
                         <i className="fas fa-users icon"></i>Usuarios
                     </NavLink>
                 </nav>

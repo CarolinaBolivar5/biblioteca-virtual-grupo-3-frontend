@@ -151,3 +151,49 @@ export const actualizarLibro = async (id, libroActualizado) => {
         throw error;
     }
 };
+
+export const crearUsuario = async (nuevoUsuario) => {
+    try {
+        const response = await fetch(endPoints.usuarios, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+            body: JSON.stringify({
+                email: nuevoUsuario.email,
+                password: nuevoUsuario.password,
+                perfil: {
+                    nombre: nuevoUsuario.nombres,
+                    apellido: nuevoUsuario.apellidos,
+                    numeroDocumento: nuevoUsuario.numeroDocumento,
+                    tipoDocumento: nuevoUsuario.tipoDocumento,
+                    telefono: nuevoUsuario.telefono || null,
+                    direccion: nuevoUsuario.direccion || null,
+                },
+                rol: {
+                    id: parseInt(nuevoUsuario.rolId, 10),
+                },
+            }),
+        });
+        if (!response.ok) throw new Error('Fallo al crear usuario');
+        return await response.json();
+    } catch (error) {
+        console.error('Hubo un error en POST usuario:', error);
+        throw error;
+    }
+};
+
+export const getUsuarios = async () => {
+    try {
+        console.log('Calling getUsuarios...');
+        const response = await fetch(endPoints.usuarios);
+        console.log('Response status:', response.status);
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+        const data = await response.json();
+        console.log('Usuarios fetched:', data);
+        return data;
+    } catch (error) {
+        console.error('Hubo un error en GET usuarios:', error);
+        return [];
+    }
+};
