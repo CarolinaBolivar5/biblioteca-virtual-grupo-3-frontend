@@ -9,7 +9,7 @@ const getDisplayName = (user) => {
 };
 
 const AdminPerfil = () => {
-    const user = getUser();
+    const [user] = useState(() => getUser());
     const [profile, setProfile] = useState(user);
     const [loading, setLoading] = useState(Boolean(user?.id));
 
@@ -50,7 +50,7 @@ const AdminPerfil = () => {
         return () => {
             cancelled = true;
         };
-    }, [user?.id]);
+    }, [user]);
 
     if (!user) {
         return <Navigate to="/login" replace />;

@@ -9,5 +9,6 @@ export const endPoints = {
   perfiles: withBase('/perfiles'),
   perfilPorId: (id) => withBase(`/perfiles/${encodeURIComponent(id)}`),
   prestamos: withBase('/prestamos'),
+  categorias: withBase('/categorias'),
   libros: withBase('/api/libros'),
 };
