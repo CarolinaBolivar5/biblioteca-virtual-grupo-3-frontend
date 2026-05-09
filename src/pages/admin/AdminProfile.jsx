@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { getUsuarioPorId, getPerfilPorId } from '../../services/api';
-import { getUser } from '../../helpers/auth';
+import { clearAuthData, getUser } from '../../helpers/auth';
 
 const getDisplayName = (user) => {
     const fullName = [user?.nombre, user?.apellido].filter(Boolean).join(' ').trim();
@@ -9,6 +9,7 @@ const getDisplayName = (user) => {
 };
 
 const AdminPerfil = () => {
+    const navigate = useNavigate();
     const [user] = useState(() => getUser());
     const [profile, setProfile] = useState(user);
     const [loading, setLoading] = useState(Boolean(user?.id));
@@ -78,6 +79,11 @@ const AdminPerfil = () => {
         { label: 'Estado de sesion', value: loading ? 'Actualizando' : 'Activa' },
     ];
 
+    const handleLogout = () => {
+        clearAuthData();
+        navigate('/login', { replace: true });
+    };
+
     return (
         <section className="admin-profile">
             <div className="header-content">
@@ -85,10 +91,16 @@ const AdminPerfil = () => {
                     <h1>Perfil del administrador</h1>
                     <p className="breadcrumb">Admin / Perfil</p>
                 </div>
-                <Link to="/admin/dashboard" className="btn btn-light">
-                    <i className="fas fa-arrow-left icon-btn"></i>
-                    Volver al dashboard
-                </Link>
+                <div className="form-actions">
+                    <Link to="/admin/dashboard" className="btn btn-light">
+                        <i className="fas fa-arrow-left icon-btn"></i>
+                        Volver al dashboard
+                    </Link>
+                    <button type="button" className="btn btn-danger" onClick={handleLogout}>
+                        <i className="fas fa-sign-out-alt icon-btn"></i>
+                        Cerrar sesion
+                    </button>
+                </div>
             </div>
 
             <article className="admin-profile-card">
