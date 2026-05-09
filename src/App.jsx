@@ -1,8 +1,9 @@
-﻿import React from 'react'
+import { RouterProvider } from 'react-router-dom';
 import { Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import PrivateRoute from './router/PrivateRoute'
-import Home from './pages/Home'
+import appRouter from './router/AppRouter';
+import './App.css';
 import Catalog from './pages/Catalog'
 import BlogPage from './pages/BlogPage'
 import Login from './pages/login/Login'
@@ -14,7 +15,7 @@ import CreatePostPage from './pages/CreatePostPage'
 import NotFound from './pages/NotFound'
 import AdminDashboardPlaceholder from './pages/placeholders/AdminDashboardPlaceholder'
 
-const App = () => {
+function App() {
   return (
     <AuthProvider>
       <Routes>
@@ -78,4 +79,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;

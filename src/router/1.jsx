@@ -1,1 +1,0 @@
-// # Configuración de navegación (vacio por ahora)

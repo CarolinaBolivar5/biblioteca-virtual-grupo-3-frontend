@@ -1,13 +1,26 @@
-const API_URL = 'https://biblioteca-virtual-grupo-3.onrender.com'
-const base = (import.meta.env.VITE_API_URL || API_URL).replace(/\/$/, '')
+const API_URL = 'https://biblioteca-virtual-grupo-3.onrender.com';
 
-const withBase = (path) => (base ? `${base}${path}` : path)
+const base = (import.meta.env.VITE_API_URL || API_URL).replace(/\/$/, '');
 
-export const end_points = {
+const withBase = (path) => `${base}${path}`;
+
+export const endPoints = {
   usuarios: withBase('/usuarios'),
+  usuarioPorId: (id) => withBase(`/usuarios/${encodeURIComponent(id)}`),
+
   perfiles: withBase('/perfiles'),
+  perfilPorId: (id) => withBase(`/perfiles/${encodeURIComponent(id)}`),
+
   roles: withBase('/roles'),
+
   prestamos: withBase('/prestamos'),
-  prestamosPorPerfil: (perfilId) => withBase(`/prestamos/perfil/${perfilId}`),
-  librosPrestadosPorPerfil: (perfilId) => withBase(`/perfiles/${perfilId}/libros-prestados`),
-}
+  prestamosPorPerfil: (perfilId) =>
+    withBase(`/prestamos/perfil/${perfilId}`),
+
+  librosPrestadosPorPerfil: (perfilId) =>
+    withBase(`/perfiles/${perfilId}/libros-prestados`),
+
+  categorias: withBase('/categorias'),
+
+  libros: withBase('/api/libros'),
+};

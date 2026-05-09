@@ -1,0 +1,885 @@
+/* Variables CSS para colores y tamaños */
+:root {
+    --primary-color: #0d6efd; /* Azul de Bootstrap */
+    --secondary-color: #6c757d; /* Gris de Bootstrap */
+    --light-bg: #f8f9fa;
+    --dark-text: #333;
+    --border-color: #dee2e6;
+    --sidebar-width: 250px;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif; /* Fuente genérica */
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    overflow-x: hidden; /* Evita scroll horizontal no deseado */
+}
+
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: #fff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0; /* Evita que el sidebar se encoja */
+    padding-top: 1rem;
+}
+
+.sidebar-header {
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--dark-text);
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+}
+
+.sidebar-header .logo-sidebar {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.sidebar-user-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 1rem 1rem;
+    padding: 0.85rem 1rem;
+    color: var(--dark-text);
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: #f8f9fa;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-user-link i {
+    color: var(--primary-color);
+    font-size: 1.35rem;
+}
+
+.sidebar-user-link span {
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.sidebar-user-link:hover,
+.sidebar-user-link.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+}
+
+.sidebar-user-link:hover i,
+.sidebar-user-link.active i {
+    color: #fff;
+}
+
+.sidebar-nav {
+    padding: 0 0.5rem;
+}
+
+.sidebar-section-title {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--secondary-color);
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-nav .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--dark-text);
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.sidebar-nav .nav-item .icon {
+    font-size: 1.1rem;
+    margin-right: 0.75rem;
+    color: var(--primary-color);
+}
+
+.sidebar-nav .nav-item:hover {
+    background-color: #e9ecef;
+    color: var(--dark-text);
+}
+
+.sidebar-nav .nav-item.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    font-weight: bold;
+}
+
+.sidebar-nav .nav-item.active .icon {
+    color: #fff;
+}
+
+/* --- Page Content --- */
+.page-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* columna admin al menos alto de ventana */
+}
+
+/* Cabecera interna admin no encoge */
+.page-content > .navbar {
+    flex-shrink: 0;
+}
+
+/* Contenedor: contenido crece, footer al final */
+.page-content .admin-layout-stack {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.admin-layout-main {
+    flex: 1 1 auto;
+}
+
+.admin-layout-footer {
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+/* --- Navbar --- */
+.navbar {
+    background-color: #fff;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .menu-toggle {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: none; /* Oculto por defecto en desktop, visible en móviles */
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Alinea los elementos a la derecha */
+}
+
+.navbar-nav .nav-link {
+    color: var(--secondary-color);
+    text-decoration: none;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary-color);
+}
+
+.navbar-nav .nav-link .icon-lg {
+    font-size: 1.3rem;
+    margin-right: 0.3rem;
+}
+
+/* Dropdown (solo para estructura, no funcional sin JS) */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-left: 1rem;
+}
+
+.dropdown-toggle::after {
+    content: " \25BC"; /* Triángulo hacia abajo */
+    font-size: 0.8em;
+    margin-left: 5px;
+}
+
+.dropdown-menu {
+    display: none; /* Oculto por defecto, se necesita JS para mostrar */
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+    right: 0; /* Alinea a la derecha */
+    top: 100%; /* Debajo del toggle */
+    padding: 0.5rem 0;
+}
+
+.dropdown-item {
+    color: var(--dark-text);
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown-divider {
+    height: 1px;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    background-color: var(--border-color);
+}
+
+/* --- Main Container & Common Elements --- */
+.container {
+    padding: 1.5rem;
+    flex-grow: 1; /* Permite que el contenedor principal crezca */
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+}
+
+.header-content h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: var(--dark-text);
+}
+
+.breadcrumb {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+/* --- Dashboard cards --- */
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-cards .card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1.25rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    background: #fff;
+    border: 1px solid var(--border-color);
+    margin: 0;
+}
+
+.dashboard-cards .card-icon {
+    font-size: 2rem;
+    margin-right: 1rem;
+    line-height: 1;
+}
+
+.dashboard-cards .card-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.dashboard-cards .card-value {
+    font-size: 1.75rem;
+    font-weight: bold;
+    line-height: 1.2;
+    color: var(--dark-text);
+}
+
+.dashboard-cards .card-title {
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+    margin-top: 0.25rem;
+}
+
+.dashboard-cards .card-primary {
+    border-left: 4px solid var(--primary-color);
+}
+.dashboard-cards .card-primary .card-icon {
+    color: var(--primary-color);
+}
+
+.dashboard-cards .card-success {
+    border-left: 4px solid #28a745;
+}
+.dashboard-cards .card-success .card-icon {
+    color: #28a745;
+}
+
+.dashboard-cards .card-warning {
+    border-left: 4px solid #ffc107;
+}
+.dashboard-cards .card-warning .card-icon {
+    color: #e0a800;
+}
+
+.dashboard-cards .card-info {
+    border-left: 4px solid #17a2b8;
+}
+.dashboard-cards .card-info .card-icon {
+    color: #17a2b8;
+}
+
+.dashboard-cards .card-danger {
+    border-left: 4px solid #dc3545;
+}
+.dashboard-cards .card-danger .card-icon {
+    color: #dc3545;
+}
+
+.dashboard-cards .card-secondary {
+    border-left: 4px solid var(--secondary-color);
+}
+.dashboard-cards .card-secondary .card-icon {
+    color: var(--secondary-color);
+}
+
+/* --- Admin profile --- */
+.admin-profile {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.admin-profile-card {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+}
+
+.admin-profile-identity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-profile-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    flex: 0 0 auto;
+}
+
+.admin-profile-kicker {
+    display: inline-block;
+    margin-bottom: 0.25rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-transform: uppercase;
+}
+
+.admin-profile-identity h2 {
+    margin: 0;
+    color: var(--dark-text);
+    font-size: 1.7rem;
+}
+
+.admin-profile-identity p {
+    margin: 0.25rem 0 0;
+    color: var(--secondary-color);
+}
+
+.admin-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.admin-profile-detail {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: #f8f9fa;
+    min-width: 0;
+}
+
+.admin-profile-detail span {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--secondary-color);
+    font-size: 0.85rem;
+}
+
+.admin-profile-detail strong {
+    display: block;
+    color: var(--dark-text);
+    overflow-wrap: anywhere;
+}
+
+/* --- Buttons --- */
+.btn {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: inline-flex; /* Permite alinear el ícono y texto */
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #fff; /* Color de texto por defecto para botones primarios */
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.btn-primary:hover {
+    background-color: #0b5ed7; /* Un poco más oscuro */
+    border-color: #0a58ca;
+}
+
+.btn-light {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: var(--dark-text);
+}
+.btn-light:hover {
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #333; /* Texto oscuro para botón amarillo */
+}
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+.btn-danger:hover {
+    background-color: #bb2d3b;
+    border-color: #b02a37;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+.btn-secondary:hover {
+    background-color: #5c636a;
+    border-color: #565e64;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+.btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+.btn-sm {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.icon-btn {
+    margin-right: 0.5rem;
+}
+
+/* --- Table Styling --- */
+.table-container {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    overflow-x: auto; /* Para tablas que exceden el ancho */
+    margin-bottom: 1.5rem;
+}
+
+.table-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+    gap: 10px; /* Espacio entre los elementos */
+}
+
+.search-input {
+    position: relative;
+}
+
+.search-input input {
+    padding: 0.5rem 1rem 0.5rem 2.5rem; /* Espacio para el ícono */
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 0.9rem;
+    width: 200px; /* Ancho fijo para el input de búsqueda */
+}
+
+.search-input .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.data-table th,
+.data-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.data-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: var(--dark-text);
+    position: relative; /* Para el ícono de sort */
+}
+
+.data-table th .sort-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+    font-size: 0.8rem;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f6f6f6;
+}
+
+.data-table .icon-table {
+    color: var(--secondary-color);
+    margin-right: 5px;
+}
+
+.data-table .actions {
+    white-space: nowrap; /* Evita que los botones se rompan en varias líneas */
+}
+
+/* Badges (similar a Bootstrap) */
+.badge {
+    padding: 0.35em 0.65em;
+    border-radius: 0.375rem;
+    font-size: 0.75em;
+    font-weight: bold;
+    color: #fff;
+    display: inline-block; /* Para el padding */
+}
+.badge.bg-success {
+    background-color: #28a745;
+}
+.badge.bg-danger {
+    background-color: #dc3545;
+}
+
+/* --- Pagination --- */
+.pagination-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination .page-link {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    color: var(--primary-color);
+    text-decoration: none;
+    margin-left: -1px; /* Para que los bordes se superpongan */
+}
+
+.pagination .page-link:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.pagination .page-link:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.pagination .page-link:hover {
+    background-color: #e9ecef;
+}
+
+.pagination .page-link.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.pagination .page-link.disabled {
+    color: var(--secondary-color);
+    pointer-events: none; /* Deshabilita el clic */
+    background-color: #e9ecef;
+}
+
+/* --- FORMULARIO DONDE EL USUARIO PUEDE ESCRIBIR --- */
+.add-edit-form-container {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    margin-top: 2rem;
+    border: 1px solid var(--border-color);
+    /* Puedes cambiar esto para que esté OCULTO por defecto y el desarrollador lo muestre. */
+    /* display: none; */
+    display: block; /* Por defecto visible para que el usuario pueda interactuar con él */
+}
+
+.add-edit-form-container h4 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--dark-text);
+    font-size: 1.5rem;
+}
+
+.add-edit-form .form-group-row {
+    display: flex;
+    gap: 1.5rem; /* Espacio entre los campos de la misma fila */
+    margin-bottom: 1rem;
+    flex-wrap: wrap; /* Permite que los campos se envuelvan */
+}
+
+.add-edit-form .form-group {
+    flex: 1; /* Cada grupo toma igual espacio en la fila */
+    min-width: 200px; /* Ancho mínimo para que no se apilen demasiado */
+    margin-bottom: 0.5rem; /* Espacio entre grupos en columnas */
+}
+
+.add-edit-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: var(--dark-text);
+    font-size: 0.9rem;
+}
+
+.add-edit-form input[type="text"],
+.add-edit-form input[type="tel"],
+.add-edit-form input[type="email"],
+.add-edit-form input[type="date"],
+.add-edit-form select,
+.add-edit-form textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Incluye padding y border en el width */
+}
+
+.add-edit-form input[readonly] {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.add-edit-form select {
+    appearance: none; /* Quita el estilo por defecto del select en algunos navegadores */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-24.8%200L146.2%20188.6%2029.2%2069.4a17.6%2017.6%200%200%200-24.8%2024.8l130.4%20130.4a17.6%2017.6%200%200%200%2024.8%200l130.4-130.4a17.6%2017.6%200%200%200%200-24.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 0.7em top 50%;
+    background-size: 0.65em auto;
+}
+
+.add-edit-form .form-actions {
+    text-align: right;
+    margin-top: 1.5rem;
+}
+
+.add-edit-form .form-actions .btn {
+    margin-left: 10px;
+}
+
+/* --- Footer --- */
+.footer {
+    background-color: var(--light-bg);
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-top: auto; /* Empuja el footer hacia abajo */
+}
+
+.footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Overlay móvil detrás del sidebar */
+.admin-sidebar-overlay {
+    display: none;
+}
+
+@media (max-width: 991.98px) {
+    .admin-sidebar-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 999;
+        margin: 0;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: rgba(0, 0, 0, 0.45);
+        cursor: pointer;
+    }
+}
+
+@media (min-width: 992px) {
+    .sidebar {
+        margin-left: 0 !important;
+        position: relative !important;
+        height: auto !important;
+        z-index: auto !important;
+    }
+
+    .admin-sidebar-overlay {
+        display: none !important;
+    }
+}
+
+/* --- Responsive Adjustments (Media Queries) --- */
+@media (max-width: 991.98px) {
+    .sidebar {
+        margin-left: calc(-1 * var(--sidebar-width));
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        z-index: 1000;
+        transition: margin-left 0.3s ease-out;
+        overflow-y: auto;
+    }
+
+    .wrapper.sidebar-open .sidebar {
+        margin-left: 0;
+    }
+
+    .navbar .menu-toggle {
+        display: block; /* Muestra el botón de menú en móviles */
+    }
+
+    .navbar-nav {
+        display: flex;
+        flex-grow: 1;
+        justify-content: flex-end;
+    }
+
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .header-content h1, .breadcrumb {
+        width: 100%;
+    }
+    .header-content .btn {
+        width: 100%;
+    }
+
+    .table-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .table-actions > div {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .table-actions .btn {
+        flex-grow: 1;
+    }
+    .search-input {
+        width: 100%;
+    }
+    .search-input input {
+        width: 100%;
+    }
+
+    .pagination-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .pagination {
+        margin-top: 0.5rem;
+    }
+
+    .add-edit-form .form-group-row {
+        flex-direction: column;
+        gap: 0; /* No hay gap si es una columna */
+    }
+    .add-edit-form .form-group {
+        width: 100%;
+        min-width: unset;
+    }
+}
