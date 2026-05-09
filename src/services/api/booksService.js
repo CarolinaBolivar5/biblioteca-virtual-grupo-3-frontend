@@ -3,9 +3,9 @@ import { request } from './httpClient';
 
 const normalizeBook = (libro) => ({
     id: libro.id,
-    titulo: libro.nombreLibro || libro.titulo || 'Sin titulo',
+    titulo: libro.nombreLibro,
     descripcion: libro.descripcion || 'Sin descripcion',
-    disponible: libro.estado == null || libro.estado === 'disponible',
+    disponible: libro.estado === null || libro.estado === 'disponible',
     autoresTexto: libro.autoresTexto,
     cantidadPaginas: libro.cantidadPaginas,
     googleId: libro.googleId,
@@ -24,14 +24,8 @@ const buildBookPayload = (libro) => ({
 });
 
 export const getLibros = async () => {
-    try {
-        const data = await request(endPoints.libros);
-        const libros = Array.isArray(data) ? data : data?.libros ?? data?.content ?? [];
-        return Array.isArray(libros) ? libros.map(normalizeBook) : [];
-    } catch (error) {
-        console.error('Hubo un error en GET libros:', error);
-        return [];
-    }
+    const data = await request(endPoints.libros);
+    return Array.isArray(data) ? data.map(normalizeBook) : [];
 };
 
 export const crearLibro = (nuevoLibro) =>
@@ -40,13 +34,13 @@ export const crearLibro = (nuevoLibro) =>
         body: JSON.stringify(buildBookPayload(nuevoLibro)),
     });
 
-export const eliminarLibro = async (id) => {
-    await request(`${endPoints.libros}/${id}`, { method: 'DELETE' });
-    return true;
-};
+export const eliminarLibro = (id) =>
+    request(`${endPoints.libros}/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+    });
 
 export const actualizarLibro = (id, libroActualizado) =>
-    request(`${endPoints.libros}/${id}`, {
+    request(`${endPoints.libros}/${encodeURIComponent(id)}`, {
         method: 'PUT',
         body: JSON.stringify(buildBookPayload(libroActualizado)),
     });

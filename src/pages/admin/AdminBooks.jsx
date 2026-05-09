@@ -1,49 +1,94 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Swal from 'sweetalert2';
-import { actualizarLibro, crearLibro, eliminarLibro, getLibros } from '../../services/api';
+import { actualizarLibro, crearLibro, eliminarLibro, getCategorias, getLibros } from '../../services/api';
 
-const emptyBookForm = () => ({
+const emptyBookForm = {
     nombreLibro: '',
     autoresTexto: '',
     cantidadPaginas: '',
     descripcion: '',
     googleId: '',
     thumbnail: '',
-    categoriaId: 1,
-});
+    categoriaId: '',
+};
 
 const AdminBooks = () => {
-    const [libros, setLibros] = useState([]);
+    const [books, setBooks] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState('');
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [editingLibro, setEditingLibro] = useState(null);
+    const [editingBook, setEditingBook] = useState(null);
     const [createFormData, setCreateFormData] = useState(emptyBookForm);
     const [editFormData, setEditFormData] = useState(emptyBookForm);
     const [submitting, setSubmitting] = useState(false);
 
-    const fetchLibros = async () => {
-        const data = await getLibros();
-        setLibros(data);
+    const fetchAdminData = async () => {
+        setLoading(true);
+        const [booksData, categoriesData] = await Promise.all([getLibros(), getCategorias()]);
+        setBooks(booksData);
+        setCategories(categoriesData);
+        setCreateFormData((current) => ({ ...current, categoriaId: current.categoriaId || categoriesData[0]?.id || '' }));
         setLoading(false);
     };
 
     useEffect(() => {
         let cancelled = false;
 
-        const loadLibros = async () => {
-            const data = await getLibros();
-            if (!cancelled) {
-                setLibros(data);
-                setLoading(false);
-            }
-        };
+        Promise.all([getLibros(), getCategorias()])
+            .then(([booksData, categoriesData]) => {
+                if (!cancelled) {
+                    setBooks(booksData);
+                    setCategories(categoriesData);
+                    setCreateFormData((current) => ({ ...current, categoriaId: current.categoriaId || categoriesData[0]?.id || '' }));
+                }
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    void Swal.fire('Error', 'No se pudo cargar el catalogo', 'error');
+                }
+            })
+            .finally(() => {
+                if (!cancelled) {
+                    setLoading(false);
+                }
+            });
 
-        void loadLibros();
         return () => {
             cancelled = true;
         };
     }, []);
+
+    const filteredBooks = useMemo(() => {
+        const query = search.trim().toLowerCase();
+        if (!query) return books;
+        return books.filter((book) =>
+            [book.id, book.titulo, book.descripcion, book.autoresTexto]
+                .some((value) => String(value ?? '').toLowerCase().includes(query))
+        );
+    }, [books, search]);
+
+    const handleDelete = async (id) => {
+        const result = await Swal.fire({
+            title: 'Eliminar libro',
+            text: 'Esta accion no se puede deshacer',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await eliminarLibro(id);
+                await Swal.fire('Eliminado', 'El libro ha sido eliminado.', 'success');
+                await fetchAdminData();
+            } catch {
+                await Swal.fire('Error', 'No se pudo eliminar el libro', 'error');
+            }
+        }
+    };
 
     const handleCreateChange = (event) => {
         setCreateFormData({ ...createFormData, [event.target.name]: event.target.value });
@@ -55,48 +100,26 @@ const AdminBooks = () => {
         try {
             await crearLibro(createFormData);
             await Swal.fire('Guardado', 'Libro registrado correctamente.', 'success');
-            setCreateFormData(emptyBookForm());
+            setCreateFormData({ ...emptyBookForm, categoriaId: categories[0]?.id || '' });
             setShowCreateForm(false);
-            await fetchLibros();
+            await fetchAdminData();
         } catch {
-            Swal.fire('Error', 'No se pudo guardar el libro.', 'error');
+            await Swal.fire('Error', 'No se pudo guardar el libro', 'error');
         } finally {
             setSubmitting(false);
         }
     };
 
-    const handleDelete = async (id) => {
-        const result = await Swal.fire({
-            title: 'Eliminar libro',
-            text: 'Esta accion no se puede deshacer',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Eliminar',
-            cancelButtonText: 'Cancelar',
-        });
-        if (result.isConfirmed) {
-            try {
-                await eliminarLibro(id);
-                await Swal.fire('Eliminado', 'El libro ha sido eliminado.', 'success');
-                await fetchLibros();
-            } catch {
-                Swal.fire('Error', 'No se pudo eliminar el libro', 'error');
-            }
-        }
-    };
-
-    const handleEdit = (libro) => {
-        setEditingLibro(libro);
+    const handleEdit = (book) => {
+        setEditingBook(book);
         setEditFormData({
-            nombreLibro: libro.titulo,
-            autoresTexto: libro.autoresTexto || '',
-            cantidadPaginas: libro.cantidadPaginas || '',
-            descripcion: libro.descripcion,
-            googleId: libro.googleId || '',
-            thumbnail: libro.thumbnail || '',
-            categoriaId: libro.categoria?.id || 1,
+            nombreLibro: book.titulo,
+            autoresTexto: book.autoresTexto || '',
+            cantidadPaginas: book.cantidadPaginas || '',
+            descripcion: book.descripcion,
+            googleId: book.googleId || '',
+            thumbnail: book.thumbnail || '',
+            categoriaId: book.categoria?.id || categories[0]?.id || '',
         });
         setShowEditModal(true);
     };
@@ -108,14 +131,26 @@ const AdminBooks = () => {
     const handleEditSubmit = async (event) => {
         event.preventDefault();
         try {
-            await actualizarLibro(editingLibro.id, editFormData);
+            await actualizarLibro(editingBook.id, editFormData);
             await Swal.fire('Actualizado', 'El libro ha sido actualizado.', 'success');
             setShowEditModal(false);
-            await fetchLibros();
+            await fetchAdminData();
         } catch {
-            Swal.fire('Error', 'No se pudo actualizar el libro', 'error');
+            await Swal.fire('Error', 'No se pudo actualizar el libro', 'error');
         }
     };
+
+    const renderCategorySelect = (value, onChange) => (
+        <select name="categoriaId" value={value} onChange={onChange} required disabled={categories.length === 0}>
+            {categories.length === 0 ? (
+                <option value="">No hay categorias</option>
+            ) : (
+                categories.map((category) => (
+                    <option key={category.id} value={category.id}>{category.nombre}</option>
+                ))
+            )}
+        </select>
+    );
 
     const renderBookForm = (formData, onChange, submitLabel, disabled = false) => (
         <>
@@ -135,8 +170,8 @@ const AdminBooks = () => {
                     <input type="number" name="cantidadPaginas" value={formData.cantidadPaginas} onChange={onChange} />
                 </div>
                 <div className="form-group">
-                    <label>Categoria ID <span className="text-danger">*</span></label>
-                    <input type="number" name="categoriaId" value={formData.categoriaId} onChange={onChange} required />
+                    <label>Categoria <span className="text-danger">*</span></label>
+                    {renderCategorySelect(formData.categoriaId, onChange)}
                 </div>
             </div>
             <div className="form-group-row">
@@ -179,7 +214,7 @@ const AdminBooks = () => {
                 <div className="add-edit-form-container">
                     <h4>Datos del libro</h4>
                     <form className="add-edit-form" onSubmit={handleCreateSubmit}>
-                        {renderBookForm(createFormData, handleCreateChange, submitting ? 'Guardando...' : 'Registrar Libro', submitting)}
+                        {renderBookForm(createFormData, handleCreateChange, submitting ? 'Guardando...' : 'Registrar Libro', submitting || !createFormData.categoriaId)}
                     </form>
                 </div>
             )}
@@ -188,7 +223,7 @@ const AdminBooks = () => {
                 <div className="table-actions">
                     <div className="search-input">
                         <i className="fas fa-search search-icon"></i>
-                        <input type="text" placeholder="Buscar titulo..." />
+                        <input type="search" placeholder="Buscar titulo..." value={search} onChange={(event) => setSearch(event.target.value)} />
                     </div>
                 </div>
 
@@ -205,20 +240,22 @@ const AdminBooks = () => {
                     <tbody>
                         {loading ? (
                             <tr><td colSpan="5">Cargando catalogo...</td></tr>
+                        ) : filteredBooks.length === 0 ? (
+                            <tr><td colSpan="5">No hay libros registrados.</td></tr>
                         ) : (
-                            libros.map((libro) => (
-                                <tr key={libro.id}>
-                                    <td>{libro.id}</td>
-                                    <td>{libro.titulo.substring(0, 20)}</td>
-                                    <td>{libro.descripcion.substring(0, 30)}...</td>
+                            filteredBooks.map((book) => (
+                                <tr key={book.id}>
+                                    <td>{book.id}</td>
+                                    <td>{book.titulo?.substring(0, 30)}</td>
+                                    <td>{book.descripcion?.substring(0, 40)}...</td>
                                     <td>
-                                        <span className={`badge ${libro.disponible ? 'bg-success' : 'bg-warning'}`}>
-                                            {libro.disponible ? 'Disponible' : 'Ocupado'}
+                                        <span className={`badge ${book.disponible ? 'bg-success' : 'bg-warning'}`}>
+                                            {book.disponible ? 'Disponible' : 'Ocupado'}
                                         </span>
                                     </td>
                                     <td className="actions">
-                                        <button className="btn btn-sm btn-info icon-btn" onClick={() => handleEdit(libro)}><i className="fas fa-edit"></i></button>
-                                        <button className="btn btn-sm btn-danger icon-btn" onClick={() => handleDelete(libro.id)}><i className="fas fa-trash"></i></button>
+                                        <button className="btn btn-sm btn-info icon-btn" onClick={() => handleEdit(book)}><i className="fas fa-edit"></i></button>
+                                        <button className="btn btn-sm btn-danger icon-btn" onClick={() => handleDelete(book.id)}><i className="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                             ))
@@ -228,39 +265,14 @@ const AdminBooks = () => {
             </div>
 
             {showEditModal && (
-                <div
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(0,0,0,0.5)',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        zIndex: 1000,
-                    }}
-                    onClick={() => setShowEditModal(false)}
-                >
-                    <div
-                        style={{
-                            backgroundColor: 'white',
-                            padding: '20px',
-                            borderRadius: '8px',
-                            width: '90%',
-                            maxWidth: '600px',
-                            maxHeight: '80vh',
-                            overflowY: 'auto',
-                        }}
-                        onClick={(event) => event.stopPropagation()}
-                    >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                            <h5>Editar Libro</h5>
-                            <button style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }} onClick={() => setShowEditModal(false)}>&times;</button>
-                        </div>
+                <div className="modal-backdrop" onClick={() => setShowEditModal(false)}>
+                    <div className="add-edit-form-container" onClick={(event) => event.stopPropagation()}>
+                        <h4>Editar Libro</h4>
                         <form className="add-edit-form" onSubmit={handleEditSubmit}>
-                            {renderBookForm(editFormData, handleEditChange, 'Actualizar Libro')}
+                            {renderBookForm(editFormData, handleEditChange, 'Actualizar Libro', !editFormData.categoriaId)}
+                            <div className="form-actions">
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowEditModal(false)}>Cancelar</button>
+                            </div>
                         </form>
                     </div>
                 </div>

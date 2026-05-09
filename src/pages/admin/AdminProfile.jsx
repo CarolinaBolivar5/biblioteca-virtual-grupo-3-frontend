@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
+import { getUsuarioPorId, getPerfilPorId } from '../../services/api';
 import { getUser } from '../../helpers/auth';
-import { getPerfilPorId, getUsuarioPorId } from '../../services/api';
 
 const getDisplayName = (user) => {
     const fullName = [user?.nombre, user?.apellido].filter(Boolean).join(' ').trim();
     return fullName || user?.name || user?.email || 'Administrador';
 };
 
-const AdminProfile = () => {
-    const user = getUser();
+const AdminPerfil = () => {
+    const [user] = useState(() => getUser());
     const [profile, setProfile] = useState(user);
     const [loading, setLoading] = useState(Boolean(user?.id));
 
@@ -20,12 +20,12 @@ const AdminProfile = () => {
 
         const loadProfile = async () => {
             try {
-                const usuarioData = await getUsuarioPorId(user.id).catch(() => user);
+                const usuarioData = await getUsuarioPorId(user.id);
                 const perfilId = usuarioData.perfilId ?? usuarioData.perfil?.id ?? user.perfilId ?? user.perfil?.id;
                 let perfilData = usuarioData.perfil ?? user.perfil ?? null;
 
                 if (!perfilData && perfilId) {
-                    perfilData = await getPerfilPorId(perfilId).catch(() => null);
+                    perfilData = await getPerfilPorId(perfilId);
                 }
 
                 if (!cancelled) {
@@ -116,4 +116,4 @@ const AdminProfile = () => {
     );
 };
 
-export default AdminProfile;
+export default AdminPerfil;

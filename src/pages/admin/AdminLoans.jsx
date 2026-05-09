@@ -1,6 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getPrestamos } from '../../services/api';
 
+const normalizePrestamos = (data) => {
+    const list = Array.isArray(data) ? data : data?.prestamos ?? data?.content ?? data?.data ?? [];
+    return Array.isArray(list) ? list : [];
+};
+
 const getNombreUsuario = (prestamo) => {
     const perfil = prestamo?.perfil;
     const nombre = [perfil?.nombre, perfil?.apellido].filter(Boolean).join(' ').trim();
@@ -84,7 +89,7 @@ const formatDateFromDate = (date) => {
     return date.toISOString().slice(0, 10);
 };
 
-const AdminLoans = () => {
+const AdminPrestamos = () => {
     const [prestamos, setPrestamos] = useState([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true);
@@ -101,7 +106,7 @@ const AdminLoans = () => {
                 const data = await getPrestamos();
 
                 if (!cancelled) {
-                    setPrestamos(data);
+                    setPrestamos(normalizePrestamos(data));
                 }
             } catch (err) {
                 console.error('Error al consultar prestamos:', err);
@@ -209,4 +214,4 @@ const AdminLoans = () => {
     );
 };
 
-export default AdminLoans;
+export default AdminPrestamos;

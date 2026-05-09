@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { getUsuarios, getPerfilPorId } from '../services/api';
 import { saveAuthData } from '../helpers/auth';
-import { getPerfilPorId, getUsuarios } from '../services/api';
 
 const getFullName = (source) => {
   if (!source || typeof source !== 'object') return '';
@@ -11,6 +11,11 @@ const getFullName = (source) => {
   const lastName = source.apellido ?? source.lastName ?? source.perfil?.apellido ?? source.perfil?.lastName ?? '';
 
   return `${String(firstName).trim()} ${String(lastName).trim()}`.trim();
+};
+
+const normalizeUsers = (data) => {
+  const list = Array.isArray(data) ? data : data?.usuarios ?? data?.content ?? data?.data ?? [];
+  return Array.isArray(list) ? list : [];
 };
 
 const Login = () => {
@@ -27,7 +32,9 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const usuarios = await getUsuarios();
+      const data = await getUsuarios();
+
+      const usuarios = normalizeUsers(data);
       const email = credentials.email.trim();
       const authUser = usuarios.find(
         (user) =>

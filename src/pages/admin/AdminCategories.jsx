@@ -1,16 +1,30 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Swal from 'sweetalert2';
-
-const initialCategories = [
-    { id: 1, nombre: 'Ficcion', descripcion: 'Libros que contienen historias irreales' },
-    { id: 2, nombre: 'Ciencia', descripcion: 'Divulgacion y material cientifico' },
-];
+import { crearCategoria, getCategorias } from '../../services/api';
 
 const AdminCategories = () => {
-    const [categories, setCategories] = useState(initialCategories);
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [showForm, setShowForm] = useState(false);
-    const [form, setForm] = useState({ nombre: '', descripcion: '' });
+    const [formData, setFormData] = useState({ nombre: '', descripcion: '' });
+    const [submitting, setSubmitting] = useState(false);
+
+    const fetchCategories = async () => {
+        setLoading(true);
+        try {
+            const data = await getCategorias();
+            setCategories(data);
+        } catch {
+            await Swal.fire('Error', 'No se pudieron cargar las categorias', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        void fetchCategories();
+    }, []);
 
     const filteredCategories = useMemo(() => {
         const query = search.trim().toLowerCase();
@@ -21,37 +35,31 @@ const AdminCategories = () => {
         );
     }, [categories, search]);
 
+    const handleChange = (event) => {
+        setFormData({ ...formData, [event.target.name]: event.target.value });
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (!form.nombre.trim()) {
+        if (!formData.nombre.trim()) {
             await Swal.fire('Error', 'El nombre es obligatorio', 'error');
             return;
         }
 
-        setCategories((current) => [
-            ...current,
-            {
-                id: Date.now(),
-                nombre: form.nombre.trim(),
-                descripcion: form.descripcion.trim() || 'Sin descripcion',
-            },
-        ]);
-        setForm({ nombre: '', descripcion: '' });
-        setShowForm(false);
-        await Swal.fire('Guardado', 'Categoria agregada exitosamente', 'success');
-    };
-
-    const handleDelete = async (id) => {
-        const result = await Swal.fire({
-            title: 'Eliminar categoria',
-            text: 'Esta accion no se puede deshacer.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Eliminar',
-            cancelButtonText: 'Cancelar',
-        });
-        if (result.isConfirmed) {
-            setCategories((current) => current.filter((category) => category.id !== id));
+        setSubmitting(true);
+        try {
+            await crearCategoria({
+                nombre: formData.nombre.trim(),
+                descripcion: formData.descripcion.trim() || 'Sin descripcion',
+            });
+            setFormData({ nombre: '', descripcion: '' });
+            setShowForm(false);
+            await fetchCategories();
+            await Swal.fire('Guardado', 'Categoria agregada exitosamente', 'success');
+        } catch {
+            await Swal.fire('Error', 'No se pudo guardar la categoria', 'error');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -69,34 +77,23 @@ const AdminCategories = () => {
 
             {showForm && (
                 <div className="add-edit-form-container">
-                    <h4>Detalles de la categoria</h4>
+                    <h4>Detalles de la Categoria</h4>
                     <form className="add-edit-form" onSubmit={handleSubmit}>
                         <div className="form-group-row">
                             <div className="form-group">
                                 <label>Nombre de Categoria <span className="text-danger">*</span></label>
-                                <input
-                                    type="text"
-                                    value={form.nombre}
-                                    onChange={(event) => setForm((current) => ({ ...current, nombre: event.target.value }))}
-                                    placeholder="Ej. Aventura"
-                                    required
-                                />
+                                <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} placeholder="Ej. Aventura" required />
                             </div>
                         </div>
                         <div className="form-group-row">
                             <div className="form-group">
                                 <label>Descripcion</label>
-                                <textarea
-                                    rows="4"
-                                    value={form.descripcion}
-                                    onChange={(event) => setForm((current) => ({ ...current, descripcion: event.target.value }))}
-                                    placeholder="Agrega una breve descripcion"
-                                ></textarea>
+                                <textarea rows="4" name="descripcion" value={formData.descripcion} onChange={handleChange} placeholder="Agrega una breve descripcion"></textarea>
                             </div>
                         </div>
                         <div className="form-actions">
-                            <button type="submit" className="btn btn-primary">
-                                <i className="fas fa-save icon-btn"></i>Guardar Categoria
+                            <button type="submit" className="btn btn-primary" disabled={submitting}>
+                                <i className="fas fa-save icon-btn"></i>{submitting ? 'Guardando...' : 'Guardar Categoria'}
                             </button>
                         </div>
                     </form>
@@ -122,22 +119,22 @@ const AdminCategories = () => {
                             <th>ID Categoria</th>
                             <th>Nombre</th>
                             <th>Descripcion</th>
-                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredCategories.map((category) => (
-                            <tr key={category.id}>
-                                <td>{category.id}</td>
-                                <td>{category.nombre}</td>
-                                <td>{category.descripcion}</td>
-                                <td className="actions">
-                                    <button className="btn btn-sm btn-danger icon-btn" title="Eliminar" onClick={() => handleDelete(category.id)}>
-                                        <i className="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
+                        {loading ? (
+                            <tr><td colSpan="3">Cargando categorias...</td></tr>
+                        ) : filteredCategories.length === 0 ? (
+                            <tr><td colSpan="3">No hay categorias registradas.</td></tr>
+                        ) : (
+                            filteredCategories.map((category) => (
+                                <tr key={category.id}>
+                                    <td>{category.id}</td>
+                                    <td>{category.nombre}</td>
+                                    <td>{category.descripcion}</td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
