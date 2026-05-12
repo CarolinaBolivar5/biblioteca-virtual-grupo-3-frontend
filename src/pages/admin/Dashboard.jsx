@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { fetchDashboardStats, fetchUltimosPrestamos } from '../../services/api';
+import '../../styles/admin/tables.css';
+import '../../styles/admin/cards.css';
+import '../../styles/admin/admin-pages.css';
 
 const initialStats = {
     totalLibros: 0,
@@ -53,18 +56,16 @@ const Dashboard = () => {
         estado === 'Activo' ? 'badge bg-success' : 'badge bg-danger';
 
     return (
-        <>
-            <div className="header-content">
-                <div>
-                    <h1>Dashboard</h1>
-                    <p className="breadcrumb">Home / Dashboard</p>
-                </div>
+        <div className="admin-page-container">
+            <div className="admin-page-header">
+                <h1>Dashboard Administrativo</h1>
+                <p className="breadcrumb">Admin / Dashboard</p>
             </div>
 
-            <div className="dashboard-cards">
+            <div className="admin-stats-grid">
                 <div className="card card-primary">
                     <div className="card-icon">
-                        <i className="fas fa-book" aria-hidden />
+                        <i className="fas fa-book-open" aria-hidden />
                     </div>
                     <div className="card-content">
                         <div className="card-value">{loading ? '…' : stats.totalLibros}</div>
@@ -73,7 +74,7 @@ const Dashboard = () => {
                 </div>
                 <div className="card card-success">
                     <div className="card-icon">
-                        <i className="fas fa-user-graduate" aria-hidden />
+                        <i className="fas fa-people-group" aria-hidden />
                     </div>
                     <div className="card-content">
                         <div className="card-value">{loading ? '…' : stats.totalUsuarios}</div>
@@ -82,7 +83,7 @@ const Dashboard = () => {
                 </div>
                 <div className="card card-warning">
                     <div className="card-icon">
-                        <i className="fas fa-handshake" aria-hidden />
+                        <i className="fas fa-paper-plane" aria-hidden />
                     </div>
                     <div className="card-content">
                         <div className="card-value">{loading ? '…' : stats.totalPrestamos}</div>
@@ -91,7 +92,7 @@ const Dashboard = () => {
                 </div>
                 <div className="card card-info">
                     <div className="card-icon">
-                        <i className="fas fa-bookmark" aria-hidden />
+                        <i className="fas fa-layer-group" aria-hidden />
                     </div>
                     <div className="card-content">
                         <div className="card-value">{loading ? '…' : stats.totalCategorias}</div>
@@ -100,7 +101,7 @@ const Dashboard = () => {
                 </div>
                 <div className="card card-danger">
                     <div className="card-icon">
-                        <i className="fas fa-chalkboard-teacher" aria-hidden />
+                        <i className="fas fa-chalkboard" aria-hidden />
                     </div>
                     <div className="card-content">
                         <div className="card-value">{loading ? '…' : stats.totalProfesores}</div>
@@ -109,7 +110,7 @@ const Dashboard = () => {
                 </div>
                 <div className="card card-secondary">
                     <div className="card-icon">
-                        <i className="fas fa-undo" aria-hidden />
+                        <i className="fas fa-arrow-rotate-left" aria-hidden />
                     </div>
                     <div className="card-content">
                         <div className="card-value">{loading ? '…' : stats.totalDevoluciones}</div>
@@ -118,40 +119,57 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            <div className="table-container mt-4">
-                <h3>Últimos Préstamos</h3>
-                <table className="data-table">
-                    <thead>
-                        <tr>
-                            <th>Fecha Préstamo</th>
-                            <th>Libro</th>
-                            <th>Estudiante</th>
-                            <th>Fecha Devolución</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loading ? (
+            <div className="admin-content-section">
+                <h3 className="admin-section-title">
+                    <i className="fas fa-list"></i>
+                    Últimos Préstamos
+                </h3>
+                <div className="table-container">
+                    <table className="data-table">
+                        <thead>
                             <tr>
-                                <td colSpan={5}>Cargando préstamos…</td>
+                                <th>Fecha Préstamo</th>
+                                <th>Libro</th>
+                                <th>Estudiante</th>
+                                <th>Fecha Devolución</th>
+                                <th>Estado</th>
                             </tr>
-                        ) : (
-                            prestamos.map((row) => (
-                                <tr key={row.id}>
-                                    <td>{row.fechaPrestamo}</td>
-                                    <td>{row.libroTitulo}</td>
-                                    <td>{row.estudianteNombre}</td>
-                                    <td>{row.fechaDevolucion}</td>
-                                    <td>
-                                        <span className={badgeClass(row.estado)}>{row.estado}</span>
+                        </thead>
+                        <tbody>
+                            {loading ? (
+                                <tr>
+                                    <td colSpan={5}>
+                                        <div className="admin-loading-spinner"></div>
                                     </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : prestamos.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5}>
+                                        <div className="admin-empty-state">
+                                            <i className="fas fa-inbox"></i>
+                                            <h3>No hay préstamos recientes</h3>
+                                            <p>Los nuevos préstamos aparecerán aquí.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ) : (
+                                prestamos.map((row) => (
+                                    <tr key={row.id}>
+                                        <td>{row.fechaPrestamo}</td>
+                                        <td>{row.libroTitulo}</td>
+                                        <td>{row.estudianteNombre}</td>
+                                        <td>{row.fechaDevolucion}</td>
+                                        <td>
+                                            <span className={badgeClass(row.estado)}>{row.estado}</span>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </>
+        </div>
     );
 };
 

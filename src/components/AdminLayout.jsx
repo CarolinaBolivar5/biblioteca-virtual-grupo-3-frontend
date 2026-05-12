@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import '../styles/admin/global.css';
 import AdminLogo from '../assets/Logo.png';
-import { getUser } from '../helpers/auth';
+import { useAuth } from '../contexts/AuthContext';
+import '../styles/admin/sidebar.css';   
+import '../styles/admin/variables.css';
+import '../styles/admin/layout.css';
+
 
 const AdminLayout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const user = getUser();
+    const { user } = useAuth();
     const userName = user?.nombre || user?.name || user?.email || 'Admin';
     const closeSidebar = () => setSidebarOpen(false);
 
@@ -81,10 +85,7 @@ const AdminLayout = () => {
                     <main className="admin-layout-main">
                         <Outlet />
                     </main>
-                    <footer className="footer admin-layout-footer">
-                        <p>&copy; Reservados todos los derechos</p>
-                        <p>Designed by <a href="#">BIBLIOTECA VIRTUAL</a></p>
-                    </footer>
+
                 </div>
             </div>
         </div>

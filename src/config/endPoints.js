@@ -14,6 +14,7 @@ export const endPoints = {
   roles: withBase('/roles'),
 
   prestamos: withBase('/prestamos'),
+  prestamoPorId: (id) => withBase(`/prestamos/${encodeURIComponent(id)}`),
   prestamosPorPerfil: (perfilId) =>
     withBase(`/prestamos/perfil/${perfilId}`),
 

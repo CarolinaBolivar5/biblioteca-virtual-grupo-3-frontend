@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
-import { end_points } from '../config/endPoints'
+import { endPoints } from '../config/endPoints'
 import { obtenerSesion, cerrarSesion } from '../helpers/session'
 import './UserProfile.css'
 
@@ -21,7 +21,7 @@ const UserProfile = () => {
     let cancelled = false
     const loadProfile = async () => {
       try {
-        const resUsuario = await fetch(`${end_points.usuarios}/${encodeURIComponent(session.id)}`)
+        const resUsuario = await fetch(`${endPoints.usuarios}/${encodeURIComponent(session.id)}`)
         if (!resUsuario.ok) {
           throw new Error('No se pudo cargar la información del usuario.')
         }
@@ -46,7 +46,7 @@ const UserProfile = () => {
           return
         }
 
-        const resPerfil = await fetch(`${end_points.perfiles}/${perfilId}`)
+        const resPerfil = await fetch(`${endPoints.perfiles}/${perfilId}`)
         if (!resPerfil.ok) {
           console.warn('Error al obtener perfil:', resPerfil.status)
           setProfile({
@@ -69,8 +69,8 @@ const UserProfile = () => {
           // Cargar préstamos específicos del perfil
           try {
             const prestamosUrls = [
-              end_points.prestamosPorPerfil(perfilId),
-              end_points.librosPrestadosPorPerfil(perfilId),
+              endPoints.prestamosPorPerfil(perfilId),
+              endPoints.librosPrestadosPorPerfil(perfilId),
             ]
 
             let resPrestamos = null

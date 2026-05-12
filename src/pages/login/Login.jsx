@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../../assets/Logo.png'
 import Footer from '../../components/Footer'
-import { end_points } from '../../config/endPoints'
+import { endPoints } from '../../config/endPoints'
 import { esRolAdmin } from '../../helpers/roles'
 import { guardarSesion } from '../../helpers/session'
 import { notifyApiResult, showError, showSuccess, showWarning, showInfo } from '../../helpers/alerts'
@@ -40,7 +40,7 @@ const Login = () => {
     let cancelled = false
     const run = async () => {
       try {
-        const response = await fetch(end_points.usuarios)
+        const response = await fetch(endPoints.usuarios)
         let data = {}
         try {
           data = await response.json()
@@ -98,7 +98,7 @@ const Login = () => {
     if (!perfilId) return ''
 
     try {
-      const response = await fetch(`${end_points.perfiles}/${perfilId}`)
+      const response = await fetch(`${endPoints.perfiles}/${perfilId}`)
       if (!response.ok) return ''
       const perfil = await response.json()
       return getFullName(perfil)

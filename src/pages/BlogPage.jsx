@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import { getAllPosts } from '../helpers/blogStorage';
 import './Blog.css';
 
@@ -19,7 +17,7 @@ const BlogPage = () => {
 
   return (
     <main className="blog-page" id="inicio">
-      <Navbar />
+
 
       <section className="blog-hero" id="blog">
         <div className="blog-hero__content">
@@ -101,7 +99,7 @@ const BlogPage = () => {
         </div>
       </section>
 
-      <Footer />
+
     </main>
   );
 };

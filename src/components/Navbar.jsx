@@ -8,7 +8,7 @@ const Navbar = () => {
   const auth = useAuth()
   const navigate = useNavigate()
   const displayName = auth.user?.name || auth.user?.email?.split('@')[0] || 'Usuario'
-  const profilePath = auth.user?.rolDescripcion?.toUpperCase() === 'ADMIN' ? '/admin/dashboard' : '/perfil'
+  const profilePath = (auth.user?.rolDescripcion?.toUpperCase() === 'ADMIN' || auth.user?.rolDescripcion?.toUpperCase() === 'ADMINISTRADOR') ? '/admin/dashboard' : '/perfil'
 
   const handleLogout = () => {
     auth.logout()
@@ -86,3 +86,4 @@ const Navbar = () => {
   )
 }
 
+export default Navbar

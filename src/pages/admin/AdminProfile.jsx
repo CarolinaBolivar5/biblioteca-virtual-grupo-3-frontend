@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import { getUsuarioPorId, getPerfilPorId } from '../../services/api';
-import { clearAuthData, getUser } from '../../helpers/auth';
+import '../../styles/admin/buttons.css';
+import '../../styles/admin/tables.css';
+import '../../styles/admin/variables.css';
+import '../../styles/admin/forms.css';
+import '../../styles/admin/admin-pages.css';
 
 const getDisplayName = (user) => {
     const fullName = [user?.nombre, user?.apellido].filter(Boolean).join(' ').trim();
@@ -10,7 +15,7 @@ const getDisplayName = (user) => {
 
 const AdminPerfil = () => {
     const navigate = useNavigate();
-    const [user] = useState(() => getUser());
+    const { user, logout } = useAuth();
     const [profile, setProfile] = useState(user);
     const [loading, setLoading] = useState(Boolean(user?.id));
 
@@ -80,51 +85,43 @@ const AdminPerfil = () => {
     ];
 
     const handleLogout = () => {
-        clearAuthData();
+        logout();
         navigate('/login', { replace: true });
     };
 
     return (
-        <section className="admin-profile">
-            <div className="header-content">
-                <div>
-                    <h1>Perfil del administrador</h1>
-                    <p className="breadcrumb">Admin / Perfil</p>
-                </div>
-                <div className="form-actions">
+        <div className="admin-page-container">
+            <div className="admin-page-header">
+                <h1>Perfil del Administrador</h1>
+                <p className="breadcrumb">Admin / Perfil</p>
+            </div>
+
+            <div className="admin-content-section">
+                <div className="admin-action-buttons">
                     <Link to="/admin/dashboard" className="btn btn-light">
                         <i className="fas fa-arrow-left icon-btn"></i>
-                        Volver al dashboard
+                        Volver al Dashboard
                     </Link>
                     <button type="button" className="btn btn-danger" onClick={handleLogout}>
                         <i className="fas fa-sign-out-alt icon-btn"></i>
-                        Cerrar sesion
+                        Cerrar Sesión
                     </button>
                 </div>
-            </div>
 
-            <article className="admin-profile-card">
-                <div className="admin-profile-identity">
-                    <div className="admin-profile-avatar" aria-hidden="true">
-                        {initials || 'A'}
-                    </div>
-                    <div>
-                        <span className="admin-profile-kicker">{loading ? 'Consultando backend' : 'Sesion activa'}</span>
-                        <h2>{nombre}</h2>
-                        <p>{tipoUsuario}</p>
-                    </div>
+                <div className="admin-profile-avatar">
+                    {initials || 'A'}
                 </div>
 
-                <div className="admin-profile-grid">
+                <div className="admin-profile-info">
                     {profileItems.map((item) => (
-                        <div className="admin-profile-detail" key={item.label}>
-                            <span>{item.label}</span>
-                            <strong>{item.value}</strong>
+                        <div className="admin-profile-item" key={item.label}>
+                            <div className="admin-profile-label">{item.label}</div>
+                            <div className="admin-profile-value">{item.value}</div>
                         </div>
                     ))}
                 </div>
-            </article>
-        </section>
+            </div>
+        </div>
     );
 };
 

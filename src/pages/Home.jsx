@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
 import { fetchBookData } from '../services/bookService'
 import { useAuth } from '../contexts/AuthContext'
 import './Home.css'
@@ -63,7 +61,6 @@ const Home = () => {
 
   return (
     <main className="home" id="home">
-      <Navbar />
 
       <section className="hero-section">
         <div className="hero-container">
@@ -169,7 +166,6 @@ const Home = () => {
         </div>
       </section>
 
-      <Footer />
     </main>
   )
 }

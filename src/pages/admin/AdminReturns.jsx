@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Swal from 'sweetalert2';
-import { getPrestamos } from '../../services/api';
+import { getPrestamos, devolverPrestamo } from '../../services/api';
+import '../../styles/admin/buttons.css';
 
 const normalizeReturnRow = (loan) => ({
     id: loan.id,
@@ -13,6 +14,7 @@ const normalizeReturnRow = (loan) => ({
 const AdminReturns = () => {
     const [returns, setReturns] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
     const [search, setSearch] = useState('');
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({ prestamoId: '', observaciones: '' });
@@ -48,13 +50,28 @@ const AdminReturns = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        await Swal.fire(
-            'Endpoint pendiente',
-            'El backend aun no tiene un endpoint de devoluciones; por ahora se muestra el prestamo y no se modifica el servidor.',
-            'info'
-        );
-        setFormData({ prestamoId: '', observaciones: '' });
-        setShowForm(false);
+        const prestamoId = Number(formData.prestamoId);
+        if (!Number.isInteger(prestamoId) || prestamoId <= 0) {
+            await Swal.fire('ID inválido', 'Ingresa un ID de préstamo válido.', 'warning');
+            return;
+        }
+
+        setSubmitting(true);
+        try {
+            await devolverPrestamo(prestamoId, formData.observaciones.trim());
+            await Swal.fire(
+                'Devolución registrada',
+                `El préstamo #${prestamoId} se devolvió correctamente.`,
+                'success'
+            );
+            setFormData({ prestamoId: '', observaciones: '' });
+            setShowForm(false);
+            await fetchReturns();
+        } catch (error) {
+            await Swal.fire('Error', error.message || 'No se pudo registrar la devolución.', 'error');
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -79,13 +96,13 @@ const AdminReturns = () => {
                     <form className="add-edit-form" onSubmit={handleSubmit}>
                         <div className="form-group-row">
                             <div className="form-group">
-                                <label>ID del Prestamo o Libro</label>
+                                <label>ID del Préstamo</label>
                                 <input
                                     type="text"
                                     name="prestamoId"
                                     value={formData.prestamoId}
                                     onChange={handleChange}
-                                    placeholder="Escanea o escribe codigo..."
+                                    placeholder="Escanea o escribe ID de préstamo..."
                                     required
                                 />
                             </div>
@@ -101,8 +118,9 @@ const AdminReturns = () => {
                             </div>
                         </div>
                         <div className="form-actions">
-                            <button type="submit" className="btn btn-warning">
-                                <i className="fas fa-check icon-btn"></i>Confirmar Devolucion
+                            <button type="submit" className="btn btn-warning" disabled={submitting}>
+                                <i className="fas fa-check icon-btn"></i>
+                                {submitting ? 'Guardando...' : 'Confirmar Devolución'}
                             </button>
                         </div>
                     </form>

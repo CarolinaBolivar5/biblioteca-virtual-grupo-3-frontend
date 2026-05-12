@@ -19,7 +19,7 @@ export async function fetchDashboardStats() {
 
     return {
         totalLibros: libros.length,
-        totalEstudiantes: usuarios.length,
+        totalUsuarios: usuarios.length,
         totalPrestamos: prestamos.length,
         totalCategorias: categorias.length,
         totalProfesores: usuarios.filter((usuario) =>

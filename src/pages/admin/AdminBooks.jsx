@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Swal from 'sweetalert2';
 import { actualizarLibro, crearLibro, eliminarLibro, getCategorias, getLibros } from '../../services/api';
+import '../../styles/admin/buttons.css';
+import '../../styles/admin/admin-pages.css';
+
 
 const emptyBookForm = {
     nombreLibro: '',
@@ -199,75 +202,105 @@ const AdminBooks = () => {
     );
 
     return (
-        <>
-            <div className="header-content">
-                <div>
-                    <h1>Catalogo Interno (Admin)</h1>
-                    <p className="breadcrumb">Home / Libros / Catalogo BD</p>
-                </div>
+        <div className="admin-page-container">
+            <div className="admin-page-header">
+                <h1>Catálogo de Libros</h1>
+                <p className="breadcrumb">Admin / Libros</p>
+            </div>
+
+            <div className="admin-action-buttons">
                 <button type="button" className="btn btn-primary" onClick={() => setShowCreateForm((value) => !value)}>
-                    <i className="fas fa-plus icon-btn"></i>{showCreateForm ? 'Ocultar formulario' : 'Anadir Libro'}
+                    <i className="fas fa-plus icon-btn"></i>
+                    {showCreateForm ? 'Ocultar Formulario' : 'Añadir Libro'}
                 </button>
             </div>
 
             {showCreateForm && (
-                <div className="add-edit-form-container">
-                    <h4>Datos del libro</h4>
+                <div className="admin-content-section">
+                    <h3 className="admin-section-title">
+                        <i className="fas fa-book"></i>
+                        Nuevo Libro
+                    </h3>
                     <form className="add-edit-form" onSubmit={handleCreateSubmit}>
                         {renderBookForm(createFormData, handleCreateChange, submitting ? 'Guardando...' : 'Registrar Libro', submitting || !createFormData.categoriaId)}
                     </form>
                 </div>
             )}
 
-            <div className="table-container">
-                <div className="table-actions">
-                    <div className="search-input">
-                        <i className="fas fa-search search-icon"></i>
-                        <input type="search" placeholder="Buscar titulo..." value={search} onChange={(event) => setSearch(event.target.value)} />
+            <div className="admin-content-section">
+                <h3 className="admin-section-title">
+                    <i className="fas fa-list"></i>
+                    Lista de Libros
+                </h3>
+                <div className="table-container">
+                    <div className="table-actions">
+                        <div className="search-input">
+                            <i className="fas fa-search search-icon"></i>
+                            <input type="search" placeholder="Buscar título..." value={search} onChange={(event) => setSearch(event.target.value)} />
+                        </div>
                     </div>
-                </div>
 
-                <table className="data-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Titulo</th>
-                            <th>Descripcion</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loading ? (
-                            <tr><td colSpan="5">Cargando catalogo...</td></tr>
-                        ) : filteredBooks.length === 0 ? (
-                            <tr><td colSpan="5">No hay libros registrados.</td></tr>
-                        ) : (
-                            filteredBooks.map((book) => (
-                                <tr key={book.id}>
-                                    <td>{book.id}</td>
-                                    <td>{book.titulo?.substring(0, 30)}</td>
-                                    <td>{book.descripcion?.substring(0, 40)}...</td>
-                                    <td>
-                                        <span className={`badge ${book.disponible ? 'bg-success' : 'bg-warning'}`}>
-                                            {book.disponible ? 'Disponible' : 'Ocupado'}
-                                        </span>
-                                    </td>
-                                    <td className="actions">
-                                        <button className="btn btn-sm btn-info icon-btn" onClick={() => handleEdit(book)}><i className="fas fa-edit"></i></button>
-                                        <button className="btn btn-sm btn-danger icon-btn" onClick={() => handleDelete(book.id)}><i className="fas fa-trash"></i></button>
+                    <table className="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Descripción</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loading ? (
+                                <tr>
+                                    <td colSpan="5">
+                                        <div className="admin-loading-spinner"></div>
                                     </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : filteredBooks.length === 0 ? (
+                                <tr>
+                                    <td colSpan="5">
+                                        <div className="admin-empty-state">
+                                            <i className="fas fa-book-open"></i>
+                                            <h3>No hay libros registrados</h3>
+                                            <p>Comienza añadiendo tu primer libro al catálogo.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ) : (
+                                filteredBooks.map((book) => (
+                                    <tr key={book.id}>
+                                        <td>{book.id}</td>
+                                        <td>{book.titulo?.substring(0, 30)}</td>
+                                        <td>{book.descripcion?.substring(0, 40)}...</td>
+                                        <td>
+                                            <span className={`badge ${book.disponible ? 'bg-success' : 'bg-warning'}`}>
+                                                {book.disponible ? 'Disponible' : 'Ocupado'}
+                                            </span>
+                                        </td>
+                                        <td className="actions">
+                                            <button className="btn btn-sm btn-info" onClick={() => handleEdit(book)} title="Editar">
+                                                <i className="fas fa-edit"></i>
+                                            </button>
+                                            <button className="btn btn-sm btn-danger" onClick={() => handleDelete(book.id)} title="Eliminar">
+                                                <i className="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {showEditModal && (
                 <div className="modal-backdrop" onClick={() => setShowEditModal(false)}>
-                    <div className="add-edit-form-container" onClick={(event) => event.stopPropagation()}>
-                        <h4>Editar Libro</h4>
+                    <div className="admin-content-section" onClick={(event) => event.stopPropagation()}>
+                        <h3 className="admin-section-title">
+                            <i className="fas fa-edit"></i>
+                            Editar Libro
+                        </h3>
                         <form className="add-edit-form" onSubmit={handleEditSubmit}>
                             {renderBookForm(editFormData, handleEditChange, 'Actualizar Libro', !editFormData.categoriaId)}
                             <div className="form-actions">
@@ -277,7 +310,7 @@ const AdminBooks = () => {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

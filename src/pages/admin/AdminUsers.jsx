@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { crearUsuario, getUsuarios } from '../../services/api';
+import '../../styles/admin/buttons.css';
 
 const emptyUserForm = {
   nombres: '',

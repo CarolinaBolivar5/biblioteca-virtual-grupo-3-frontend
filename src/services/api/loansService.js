@@ -6,4 +6,19 @@ export const normalizePrestamos = (data) => {
     return Array.isArray(list) ? list : [];
 };
 
+export const getPrestamoById = (id) => request(endPoints.prestamoPorId(id));
+
+export const devolverPrestamo = async (prestamoId, observaciones) => {
+  const prestamo = await getPrestamoById(prestamoId);
+  const payload = {
+    ...prestamo,
+    estado: 'Devuelto',
+    ...(observaciones ? { observaciones } : {}),
+  };
+  return request(endPoints.prestamoPorId(prestamoId), {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+};
+
 export const getPrestamos = async () => normalizePrestamos(await request(endPoints.prestamos));

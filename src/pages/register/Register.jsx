@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import Logo from '../../assets/Logo.png'
 import Footer from '../../components/Footer'
-import { end_points } from '../../config/endPoints'
+import { endPoints } from '../../config/endPoints'
 import { idRolPorNombre } from '../../helpers/roles'
 import { notifyApiResult, showError, showWarning, showInfo } from '../../helpers/alerts'
 import './Register.css'
@@ -41,7 +41,7 @@ const Register = () => {
 
   async function crearRolSiFalta(nombre) {
     try {
-      const res = await fetch(end_points.roles, {
+      const res = await fetch(points.roles, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ descripcion: nombre }),
@@ -56,7 +56,7 @@ const Register = () => {
 
   async function refrescarRoles() {
     try {
-      const res = await fetch(end_points.roles)
+      const res = await fetch(endPoints.roles)
       if (!res.ok) return Array.isArray(roles) ? roles : []
       const data = await res.json()
       const listR = Array.isArray(data) ? data : data?.roles ?? data?.content ?? []
@@ -100,8 +100,8 @@ const Register = () => {
     const run = async () => {
       try {
         const [resUsuarios, resRoles] = await Promise.all([
-          fetch(end_points.usuarios),
-          fetch(end_points.roles),
+          fetch(endPoints.usuarios),
+          fetch(endPoints.roles),
         ])
         let dataUsuarios = {}
         let dataRoles = {}
@@ -224,7 +224,7 @@ const Register = () => {
 
     setSubmitting(true)
     try {
-      const resPerfil = await fetch(end_points.perfiles, {
+      const resPerfil = await fetch(endPoints.perfiles, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(perfilBody),
@@ -252,7 +252,7 @@ const Register = () => {
         perfilId,
       }
 
-      const resUsuario = await fetch(end_points.usuarios, {
+      const resUsuario = await fetch(endPoints.usuarios, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(usuarioBody),

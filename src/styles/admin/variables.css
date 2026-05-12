@@ -1,0 +1,11 @@
+﻿:root {
+    --primary-color: #39c5f4;
+    --secondary-color: #f18c42;
+    --accent-color: #0e3b57;
+    --surface-color: #f4fbff;
+    --surface-strong: #ffffff;
+    --dark-text: #122434;
+    --muted-text: #617083;
+    --border-color: rgba(18, 52, 76, 0.12);
+    --sidebar-width: 250px;
+}

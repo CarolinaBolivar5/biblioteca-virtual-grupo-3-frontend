@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Swal from 'sweetalert2';
 import { crearCategoria, getCategorias } from '../../services/api';
+import '../../styles/admin/buttons.css';
+import '../../styles/admin/tables.css';
 
 const AdminCategories = () => {
     const [categories, setCategories] = useState([]);

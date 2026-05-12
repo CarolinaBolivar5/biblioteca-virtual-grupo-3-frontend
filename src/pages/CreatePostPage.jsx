@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import { createUniqueSlug, saveCustomPost } from '../helpers/blogStorage';
 import './CreatePost.css';
 
@@ -149,7 +147,7 @@ const CreatePostPage = () => {
 
   return (
     <main className="create-post-page">
-      <Navbar />
+
 
       <section className="create-post-shell">
         <div className="create-post-intro">
@@ -304,7 +302,6 @@ const CreatePostPage = () => {
         </form>
       </section>
 
-      <Footer />
     </main>
   );
 };

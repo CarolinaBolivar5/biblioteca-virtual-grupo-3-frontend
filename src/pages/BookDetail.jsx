@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import Footer from '../components/Footer';
-import Navbar from '../components/Navbar';
 import { useAuth } from '../contexts/AuthContext';
-import { end_points } from '../config/endPoints';
+import { endPoints } from '../config/endPoints';
 import './BookDetail.css';
 
 
@@ -104,7 +102,7 @@ const BookDetail = () => {
 
   try {
     const userResponse = await fetch(
-      `${end_points.usuarios}/${encodeURIComponent(user.id)}`
+      `${endPoints.usuarios}/${encodeURIComponent(user.id)}`
     );
 
     if (!userResponse.ok) {
@@ -135,7 +133,7 @@ const BookDetail = () => {
       perfilId,
       fechaDevolucion: form.fechaDevolucion
     };
-    const response = await fetch(end_points.prestamos, {
+    const response = await fetch(endPoints.prestamos, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -160,7 +158,7 @@ const BookDetail = () => {
 
   return (
     <main className="detail-page">
-      <Navbar />
+      
       <div className="container mt-3">
         <button
           type="button"
@@ -294,7 +292,6 @@ const BookDetail = () => {
           </div>
         )}
       </section>
-      <Footer />
     </main>
   );
 };

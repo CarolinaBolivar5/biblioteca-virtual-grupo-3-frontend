@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Footer from '../components/Footer';
-import Navbar from '../components/Navbar';
 import './Catalog.css';
 
 const googleBooksApiKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY?.trim();
@@ -208,7 +206,6 @@ const Catalog = () => {
 
   return (
     <main className="catalog-page">
-      <Navbar />
       <section className="catalog-hero">
         <div className="catalog-hero-body container text-center">
           <h1>Catálogo de libros</h1>
@@ -217,6 +214,8 @@ const Catalog = () => {
             <div className="row justify-content-center align-items-center gap-2">
               <div className="col-12 col-md-6 col-lg-5 mb-3 mb-md-0">
                 <input
+                  id="search-books"
+                  name="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Busca por reseña, autores o palabras clave"
@@ -316,7 +315,6 @@ const Catalog = () => {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 };

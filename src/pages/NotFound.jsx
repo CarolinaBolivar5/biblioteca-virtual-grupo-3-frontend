@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
-import Footer from '../components/Footer';
-import Navbar from '../components/Navbar';
 
 const NotFound = () => (
   <main className="notfound-page">
-    <Navbar />
+
     <section className="container py-5 text-center">
       <h1>Página no encontrada</h1>
       <p>No pudimos encontrar esa ruta. Regresa al inicio o al catálogo.</p>
@@ -15,7 +13,7 @@ const NotFound = () => (
         Catálogo
       </Link>
     </section>
-    <Footer />
+
   </main>
 );
 

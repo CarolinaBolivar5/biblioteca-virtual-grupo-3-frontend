@@ -1,0 +1,112 @@
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--accent-color);
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.12);
+    flex-shrink: 0;
+    padding-top: 1rem;
+}
+
+.sidebar-header {
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 1rem;
+}
+
+.sidebar-header .logo-sidebar {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.sidebar-user-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 1rem 1rem;
+    padding: 0.85rem 1rem;
+    color: var(--accent-color);
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-user-link i {
+    color: var(--secondary-color);
+    font-size: 1.35rem;
+}
+
+.sidebar-user-link span {
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.sidebar-user-link:hover,
+.sidebar-user-link.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+}
+
+.sidebar-user-link:hover i,
+.sidebar-user-link.active i {
+    color: #fff;
+}
+
+.sidebar-nav {
+    padding: 0 0.5rem;
+}
+
+.sidebar-section-title {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-nav .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: #f4f7fb;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.sidebar-nav .nav-item .icon {
+    font-size: 1.1rem;
+    margin-right: 0.75rem;
+    color: var(--secondary-color);
+}
+
+.sidebar-nav .nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #f4f7fb;
+}
+
+.sidebar-nav .nav-item.active {
+    background-color: var(--secondary-color);
+    color: #fff;
+    font-weight: bold;
+}
+
+.sidebar-nav .nav-item.active .icon {
+    color: #fff;
+}

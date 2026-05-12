@@ -1,12 +1,25 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
+import PrivateRoute from './PrivateRoute';
+
+import PublicLayout from '../components/PublicLayout';
 import AdminLayout from '../components/AdminLayout';
 
-import Home from '../pages/public/Home';
-import Catalog from '../pages/public/Catalog';
-import Login from '../pages/Login';
-import Register from '../pages/Register';
+// Públicas
+import Home from '../pages/Home';
+import Catalog from '../pages/Catalog';
+import BlogPage from '../pages/BlogPage';
+import BookDetail from '../pages/BookDetail';
 
+import Login from '../pages/login/Login';
+import Register from '../pages/register/Register';
+
+// Usuario
+import UserProfile from '../pages/UserProfile';
+import PostPage from '../pages/PostPage';
+import CreatePostPage from '../pages/CreatePostPage';
+
+// Admin
 import Dashboard from '../pages/admin/Dashboard';
 import AdminProfile from '../pages/admin/AdminProfile';
 import AdminLoans from '../pages/admin/AdminLoans';
@@ -15,49 +28,139 @@ import AdminBooks from '../pages/admin/AdminBooks';
 import AdminCategories from '../pages/admin/AdminCategories';
 import AdminReturns from '../pages/admin/AdminReturns';
 
-import PublicLayout from '../components/PublicLayout';
+// Error
+import NotFound from '../pages/NotFound';
 
 const appRouter = createBrowserRouter([
-    {
+  // =========================
+  // PUBLIC LAYOUT
+  // =========================
+  {
+    element: <PublicLayout />,
+    children: [
+      {
         path: '/',
-        element: <PublicLayout><Home /></PublicLayout>
-    },
-    {
+        element: <Home />,
+      },
+
+      {
         path: '/catalog',
-        element: <PublicLayout><Catalog /></PublicLayout>
-    },
-    {
-        path: '/login',
-        element: <Login />
-    },
-    {
-        path: '/register',
-        element: <Register />
-    },
-    {
-        path: '/admin',
-        element: <AdminLayout />,
-        children: [
-            { index: true, element: <Navigate to="dashboard" replace /> },
-            { path: 'dashboard', element: <Dashboard /> },
-            { path: 'perfil', element: <AdminProfile /> },
-            { path: 'catalogo', element: <AdminBooks /> },
-            { path: 'registro-libros', element: <Navigate to="../catalogo" replace /> },
-            { path: 'categorias', element: <AdminCategories /> },
-            { path: 'registro-categorias', element: <Navigate to="../categorias" replace /> },
-            { path: 'usuarios', element: <AdminUsers /> },
-            { path: 'registro-usuario', element: <Navigate to="../usuarios" replace /> },
-            { path: 'estudiantes', element: <Navigate to="../usuarios" replace /> },
-            { path: 'registro-estudiantes', element: <Navigate to="../usuarios" replace /> },
-            { path: 'prestamos', element: <AdminLoans /> },
-            { path: 'devoluciones', element: <AdminReturns /> },
-            { path: 'registro-devoluciones', element: <Navigate to="../devoluciones" replace /> },
-        ]
-    },
-    {
+        element: <Catalog />,
+      },
+
+      {
+        path: '/blog',
+        element: <BlogPage />,
+      },
+
+      {
+        path: '/detalle/:id',
+        element: <BookDetail />,
+      },
+
+      {
         path: '*',
-        element: <PublicLayout><h2 className="text-center mt-5">404 - Página No Encontrada</h2></PublicLayout>
-    }
+        element: <NotFound />,
+      },
+    ],
+  },
+
+  // =========================
+  // AUTH
+  // =========================
+  {
+    path: '/login',
+    element: <Login />,
+  },
+
+  {
+    path: '/register',
+    element: <Register />,
+  },
+
+  // =========================
+  // USER
+  // =========================
+  {
+    path: '/perfil',
+    element: (
+      <PrivateRoute>
+        <UserProfile />
+      </PrivateRoute>
+    ),
+  },
+
+ {
+    path: '/post/:slug',
+    element: (
+      <PrivateRoute>
+        <PostPage />
+      </PrivateRoute>
+    ),
+  },
+
+  {
+    path: '/crear-post',
+    element: (
+      <PrivateRoute>
+        <CreatePostPage />
+      </PrivateRoute>
+    ),
+  },
+
+  // =========================
+  // ADMIN
+  // =========================
+  {
+    path: '/admin',
+    element: (
+      <PrivateRoute>
+        <AdminLayout />
+      </PrivateRoute>
+    ),
+
+    children: [
+      {
+        index: true,
+        element: <Navigate to="dashboard" replace />,
+      },
+
+      {
+        path: 'dashboard',
+        element: <Dashboard />,
+      },
+
+      {
+       path: 'perfil',
+        element: <AdminProfile />,
+      },
+
+      {
+        path: 'catalogo',
+        element: <AdminBooks />,
+      },
+
+      {
+        path: 'categorias',
+        element: <AdminCategories />,
+      },
+
+      {
+        path: 'usuarios',
+        element: <AdminUsers />,
+      },
+
+      {
+        path: 'prestamos',
+        element: <AdminLoans />,
+      },
+
+      {
+        path: 'devoluciones',
+        element: <AdminReturns />,
+      },
+    ],
+  },
 ]);
 
 export default appRouter;

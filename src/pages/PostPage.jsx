@@ -1,7 +1,5 @@
 import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import { deleteCustomPost, getPostBySlug } from '../helpers/blogStorage';
 import './Post.css';
 
@@ -31,7 +29,7 @@ const PostPage = () => {
 
   return (
     <main className="post-page">
-      <Navbar />
+
 
       <section className="post-shell">
         <div className="post-header">
@@ -98,7 +96,7 @@ const PostPage = () => {
         </article>
       </section>
 
-      <Footer />
+
     </main>
   );
 };

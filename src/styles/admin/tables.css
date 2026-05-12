@@ -1,0 +1,98 @@
+.table-container {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(14, 59, 87, 0.08);
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+.table-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.search-input {
+    position: relative;
+}
+
+.search-input input {
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    width: 240px;
+}
+
+.search-input .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-color);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.data-table th,
+.data-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.data-table th {
+    background-color: #f6fbff;
+    font-weight: bold;
+    color: var(--accent-color);
+    position: relative;
+}
+
+.data-table th .sort-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+    font-size: 0.8rem;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f6f6f6;
+}
+
+.data-table .icon-table {
+    color: var(--secondary-color);
+    margin-right: 5px;
+}
+
+.data-table .actions {
+    white-space: nowrap;
+}
+
+.badge {
+    padding: 0.35em 0.65em;
+    border-radius: 0.375rem;
+    font-size: 0.75em;
+    font-weight: bold;
+    color: #fff;
+    display: inline-block;
+}
+
+.badge.bg-success {
+    background-color: #28a745;
+}
+
+.badge.bg-danger {
+    background-color: #dc3545;
+}
