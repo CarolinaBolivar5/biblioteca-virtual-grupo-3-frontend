@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../contexts/AuthContext'
 import Logo from '../../assets/Logo.png'
 import Footer from '../../components/Footer'
 import { endPoints } from '../../config/endPoints'
@@ -29,12 +30,23 @@ const getFullName = (source) => {
 
 const Login = () => {
   const navigate = useNavigate()
+  const { isLogged, user, login } = useAuth()
   const [email, setEmail] = useState(() => localStorage.getItem('rememberedUser') ?? '')
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(() => Boolean(localStorage.getItem('rememberedUser')))
   const [usuarios, setUsuarios] = useState([])
   const [loadingUsuarios, setLoadingUsuarios] = useState(true)
   const avisoSinUsuarios = useRef(false)
+  const redirectDone = useRef(false)
+
+  // Redirigir si el usuario ya está autenticado (solo al cargar la página)
+  useEffect(() => {
+    if (isLogged && !redirectDone.current) {
+      redirectDone.current = true
+      const destination = user?.rolDescripcion?.toUpperCase() === 'ADMIN' ? '/admin/perfil' : '/perfil'
+      navigate(destination, { replace: true })
+    }
+  }, [isLogged, user, navigate])
 
   useEffect(() => {
     let cancelled = false
@@ -126,7 +138,8 @@ const Login = () => {
       if (remember) localStorage.setItem('rememberedUser', email.trim())
       else localStorage.removeItem('rememberedUser')
 
-      guardarSesion({
+      // Usar el método login() del contexto en lugar de guardarSesion() directamente
+      login({
         id: authUser.id,
         email: (authUser.email ?? '').trim(),
         name: fullName,
@@ -134,8 +147,9 @@ const Login = () => {
       })
 
       await showSuccess(`Bienvenido, ${authUser.perfil?.nombre ?? email}.`, 'Inicio de sesión')
+      // Navegar según el rol
       if (esRolAdmin(authUser.rol)) {
-        navigate('/admin/dashboard')
+        navigate('/admin/perfil')
       } else {
         navigate('/perfil')
       }

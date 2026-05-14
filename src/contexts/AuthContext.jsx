@@ -86,6 +86,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     cerrarSesion();
+    localStorage.removeItem(AUTH_KEY);
     setUser(null);
   };
 

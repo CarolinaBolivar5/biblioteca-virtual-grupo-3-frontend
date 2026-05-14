@@ -2,11 +2,15 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
 import { endPoints } from '../config/endPoints'
-import { obtenerSesion, cerrarSesion } from '../helpers/session'
+import { obtenerSesion } from '../helpers/session'
+import { useAuth } from '../contexts/AuthContext'
 import './UserProfile.css'
+
 
 const UserProfile = () => {
   const navigate = useNavigate()
+  const { logout } = useAuth()
+
   const [profile, setProfile] = useState(null)
   const [loans, setLoans] = useState([])
   const [loading, setLoading] = useState(true)
@@ -126,9 +130,9 @@ const UserProfile = () => {
   if (!session) return null
 
   const handleLogout = () => {
-    cerrarSesion()
-    navigate('/login')
-  }
+  logout()
+  navigate('/login', { replace: true })
+}
 
   const nombreCompleto = profile?.nombre
     ? `${profile.nombre} ${profile.apellido ?? ''}`.trim()
