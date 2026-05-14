@@ -34,18 +34,18 @@ const BlogPage = () => {
       <section className="blog-highlights">
         <article className="blog-featured">
           <span className="blog-chip">Edicion destacada</span>
-          <h3>La biblioteca tambien cuenta historias fuera de los libros</h3>
+          <h3>La biblioteca también cuenta historias fuera de los libros</h3>
           <p>
             Este espacio reune ideas, testimonios y selecciones pensadas para
-            que cada visita a la biblioteca se sienta mas cercana, util e
+            que cada visita a la biblioteca se sienta más cercana, útil e
             inspiradora.
           </p>
         </article>
 
         <article className="blog-quote">
           <p>
-            "Cada lectura deja una huella distinta: unas ensenan, otras
-            acompanan y algunas cambian el rumbo."
+            "Cada lectura deja una huella distinta: unas enseñan, otras
+            acompañan y algunas cambian el rumbo."
           </p>
         </article>
       </section>
@@ -58,7 +58,7 @@ const BlogPage = () => {
           </div>
           <div className="blog-grid__actions">
             <p className="blog-grid__intro">
-              Conservamos tu idea original, pero con una presentacion mas moderna
+              Conservamos tu idea original, pero con una presentación más moderna
               y clara para Vite y React.
             </p>
             <Link
@@ -66,7 +66,7 @@ const BlogPage = () => {
               state={isLogged ? undefined : { from: location }}
               className="blog-create-link"
             >
-              Crear articulo
+              Crear artículo
             </Link>
           </div>
         </div>
@@ -91,7 +91,7 @@ const BlogPage = () => {
                   state={isLogged ? { from: '/blog' } : { from: { pathname: `/post/${post.slug}` } }}
                   className="blog-card__link"
                 >
-                  Leer articulo
+                  Leer artículo
                 </Link>
               </div>
             </article>

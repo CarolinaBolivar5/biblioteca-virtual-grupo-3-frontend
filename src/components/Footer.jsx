@@ -9,15 +9,15 @@ const footerColumns = [
     'Tarifas',
     'Beneficios',
     'Trabaja con nosotros',
-    'Transparencia y acceso a la informacion publica',
+    'Transparencia y acceso a la información pública',
     'Nuestras politicas',
     'Terminos y condiciones',
     'Notificaciones judiciales',
   ],
   [
-    'Te acompanamos',
-    'Atencion y servicio a la ciudadania',
-    'Presentar una peticion u observacion sobre los servicios',
+    'Te acompañamos',
+    'Atención y servicio a la ciudadanía',
+    'Presentar una peticioó u observacion sobre los servicios',
     'Carta derechos y deberes afiliados',
     'Compromisos frente a la etica y el gobierno corporativo',
     'Ayudanos a mejorar, cuentanos tu experiencia',
@@ -58,7 +58,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="footer-bottom">Derechos reservados � 2026</div>
+      <div className="footer-bottom">Derechos reservados � 2026</div>
     </footer>
   );
 };

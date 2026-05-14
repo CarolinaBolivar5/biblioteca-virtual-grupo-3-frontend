@@ -152,7 +152,7 @@ const CreatePostPage = () => {
       <section className="create-post-shell">
         <div className="create-post-intro">
           <p className="create-post-kicker">Panel de publicacion</p>
-          <h1>Crear un nuevo articulo</h1>
+          <h1>Crear un nuevo artículo</h1>
           <p>
             Escribe un post para el blog de la biblioteca. Al publicarlo se
             guardara en este navegador y aparecera de inmediato en el listado
@@ -175,11 +175,11 @@ const CreatePostPage = () => {
             </label>
 
             <label className="create-post-field">
-              <span>Categoria</span>
+              <span>Categoría</span>
               <select name="category" value={form.category} onChange={handleChange}>
                 <option value="Comunidad">Comunidad</option>
-                <option value="Guias">Guias</option>
-                <option value="Habitos">Habitos</option>
+                <option value="Guías">Guías</option>
+                <option value="Hábitos">Hábitos</option>
                 <option value="Estudio">Estudio</option>
                 <option value="Recomendados">Recomendados</option>
                 <option value="Tendencias">Tendencias</option>
@@ -202,7 +202,7 @@ const CreatePostPage = () => {
 
             {form.image ? (
               <div className="create-post-image-preview">
-                <img src={form.image} alt="Vista previa del articulo" />
+                <img src={form.image} alt="Vista previa del artículo" />
               </div>
             ) : null}
 
@@ -224,7 +224,7 @@ const CreatePostPage = () => {
                 rows="3"
                 value={form.subtitle}
                 onChange={handleChange}
-                placeholder="Frase que acompana el titulo dentro del articulo"
+                placeholder="Frase que acompaña el título dentro del artículo"
               />
             </label>
 
@@ -235,12 +235,12 @@ const CreatePostPage = () => {
                 rows="4"
                 value={form.intro}
                 onChange={handleChange}
-                placeholder="Primer parrafo destacado del articulo"
+                placeholder="Primer párrafo destacado del artículo"
               />
             </label>
 
             <div className="create-post-field create-post-field--full">
-              <span>Contenido del articulo</span>
+              <span>Contenido del artículo</span>
               <div className="create-post-blocks">
                 <div className="create-post-blocks-actions">
                   <button type="button" onClick={() => addBlock('paragraph')} className="btn btn-outline-secondary btn-sm">
@@ -287,7 +287,7 @@ const CreatePostPage = () => {
                 type="text"
                 value={form.closing}
                 onChange={handleChange}
-                placeholder="Mensaje final del articulo"
+                placeholder="Mensaje final del artículo"
               />
             </label>
           </div>
@@ -296,7 +296,7 @@ const CreatePostPage = () => {
 
           <div className="create-post-actions">
             <button type="submit" className="create-post-submit">
-              Publicar articulo
+              Publicar artículo
             </button>
           </div>
         </form>

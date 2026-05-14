@@ -89,7 +89,7 @@ const PostPage = () => {
           {canDelete ? (
             <div className="post-owner-actions">
               <button type="button" className="post-delete" onClick={handleDelete}>
-                Eliminar mi articulo
+                Eliminar mi artículo
               </button>
             </div>
           ) : null}

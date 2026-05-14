@@ -137,7 +137,7 @@ const Login = () => {
       if (esRolAdmin(authUser.rol)) {
         navigate('/admin/dashboard')
       } else {
-        navigate('/usuario/perfil')
+        navigate('/perfil')
       }
       return
     }

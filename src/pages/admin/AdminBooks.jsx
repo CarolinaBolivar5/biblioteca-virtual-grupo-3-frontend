@@ -75,7 +75,7 @@ const AdminBooks = () => {
     const handleDelete = async (id) => {
         const result = await Swal.fire({
             title: 'Eliminar libro',
-            text: 'Esta accion no se puede deshacer',
+            text: 'Esta acción no se puede deshacer',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Eliminar',
@@ -169,7 +169,7 @@ const AdminBooks = () => {
             </div>
             <div className="form-group-row">
                 <div className="form-group">
-                    <label>Cantidad de Paginas</label>
+                    <label>Cantidad de Páginas</label>
                     <input type="number" name="cantidadPaginas" value={formData.cantidadPaginas} onChange={onChange} />
                 </div>
                 <div className="form-group">
